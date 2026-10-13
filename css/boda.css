@@ -64,42 +64,112 @@ svg { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-wi
 .pendiente { color: var(--tinta-suave) !important; font-style: italic; }
 .pendiente::after { content: " ✎"; font-style: normal; font-size: 0.8em; color: var(--azul); opacity: 0.7; }
 
-/* ============ Sobre con sello de cera (Carmesí) ============ */
+/* ============ Sobre de papel (Carmesí) ============
+   Papel marfil con textura, solapas laterales e inferior con sombra, tapa con filete dorado,
+   doble marco de líneas finas y sello de cera azul en la punta de la tapa.
+   Al abrir: el sello se desprende, la tapa gira hacia atrás, sale la tarjeta y entra la invitación. */
 .sobre {
   position: fixed; inset: 0; z-index: 100; overflow: hidden;
-  display: grid; place-content: center; justify-items: center; gap: 1.2rem; text-align: center;
-  background: linear-gradient(160deg, #ffffff, #eef2f9);
-  transition: opacity 0.9s ease 0.9s, transform 1.4s cubic-bezier(.7,0,.3,1) 0.7s;
-  perspective: 1400px;
+  display: grid; place-content: center; justify-items: center; gap: 1.6rem; text-align: center;
+  padding: var(--lado);
+  background:
+    radial-gradient(60% 45% at 50% 45%, rgba(70, 115, 230, 0.35), transparent 70%),
+    radial-gradient(1.2px 1.2px at 20% 30%, #fff 50%, transparent 51%) 0 0 / 180px 180px,
+    radial-gradient(1px 1px at 70% 80%, #ffe7b8 50%, transparent 51%) 0 0 / 230px 230px,
+    linear-gradient(180deg, #050d24, #0b1c47 55%, #081638);
+  transition: opacity 0.9s ease 1.6s, visibility 0s linear 2.5s;
+  perspective: 1600px;
 }
-.sobre-fondo { position: absolute; inset: 0; background: linear-gradient(0deg, #e9eef8, #f7f9fd); clip-path: polygon(0 100%, 50% 42%, 100% 100%); filter: drop-shadow(0 -2px 0 rgba(20, 42, 92, 0.08)); }
+.sobre-para { font: italic 400 1.35rem var(--f-texto); color: #e7cf9c; letter-spacing: 0.02em; }
+.sobre-toca { font: 500 0.76rem var(--f-texto); letter-spacing: 0.3em; text-transform: uppercase; color: #a9bce3; animation: parpadeo 2.4s ease-in-out infinite; }
+@keyframes parpadeo { 50% { opacity: 0.45; } }
+
+.sobre-papel {
+  --papel: #fbf6ea;
+  --papel-2: #f1e7d2;
+  --filete: #c6a066;
+  position: relative; width: min(88vw, 30rem); aspect-ratio: 1.42;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
+  animation: flotar 5s ease-in-out infinite;
+}
+@keyframes flotar { 50% { transform: translateY(-6px) rotate(-0.6deg); } }
+/* textura de papel (fibras y grano) */
+.sobre-cuerpo, .sobre-lado, .sobre-abajo, .sobre-tapa::after {
+  background-color: var(--papel);
+  background-image:
+    radial-gradient(1px 1px at 12px 18px, rgba(120, 95, 50, 0.12) 50%, transparent 51%),
+    radial-gradient(1px 1px at 33px 7px, rgba(120, 95, 50, 0.1) 50%, transparent 51%),
+    repeating-linear-gradient(115deg, rgba(160, 130, 80, 0.035) 0 1px, transparent 1px 6px),
+    linear-gradient(160deg, var(--papel), var(--papel-2));
+  background-size: 40px 40px, 40px 40px, auto, 100% 100%;
+}
+.sobre-cuerpo { position: absolute; inset: 0; border-radius: 6px; background-color: #e9dcc1; }
+/* tarjeta dentro del sobre */
+.sobre-carta {
+  position: absolute; left: 7%; right: 7%; top: 6%; bottom: 8%;
+  display: grid; align-content: center; justify-items: center; gap: 0.2rem;
+  border-radius: 4px; background: #fff;
+  box-shadow: inset 0 0 0 6px #fff, inset 0 0 0 7px rgba(198, 160, 102, 0.8), inset 0 0 0 10px #fff, inset 0 0 0 10.5px rgba(198, 160, 102, 0.45);
+  transition: transform 1.1s cubic-bezier(.3,.1,.2,1) 0.75s;
+}
+.carta-sup { font: 600 0.62rem var(--f-texto); letter-spacing: 0.4em; text-transform: uppercase; color: #2f5aa8; }
+.carta-nombres { font: 400 clamp(2.2rem, 10vw, 3.2rem)/1 var(--f-script); color: #142a5c; }
+.carta-fecha { font: italic 400 0.9rem var(--f-texto); color: #5d6886; }
+/* solapas: laterales, inferior y tapa (con filete dorado en sus bordes) */
+.sobre-lado, .sobre-abajo { position: absolute; inset: 0; }
+.sobre-izq { clip-path: polygon(0 0, 54% 52%, 0 100%); filter: brightness(0.97); }
+.sobre-der { clip-path: polygon(100% 0, 46% 52%, 100% 100%); filter: brightness(0.95); }
+.sobre-abajo { clip-path: polygon(0 100%, 50% 44%, 100% 100%); filter: brightness(1.01) drop-shadow(0 -2px 3px rgba(90, 70, 30, 0.18)); }
+.sobre-lado::after, .sobre-abajo::after { /* línea fina sobre el doblez */
+  content: ""; position: absolute; inset: 0; background: linear-gradient(transparent, transparent);
+}
 .sobre-tapa {
-  position: absolute; inset: 0 0 auto 0; height: 58%;
-  background: linear-gradient(180deg, #ffffff, #f1f4fa);
+  position: absolute; left: 0; right: 0; top: 0; height: 60%;
+  transform-origin: 50% 0; transform-style: preserve-3d; z-index: 3;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-  transform-origin: top center; transition: transform 1.1s cubic-bezier(.6,0,.3,1);
-  filter: drop-shadow(0 6px 10px rgba(20, 42, 92, 0.12));
+  background: var(--filete);
+  transition: transform 1s cubic-bezier(.6,0,.3,1) 0.25s, z-index 0s linear 0.75s;
 }
-.sobre-tapa::after { content: ""; position: absolute; inset: 0; background: radial-gradient(1.5px 1.5px at 30% 20%, rgba(47, 90, 168, 0.25) 50%, transparent 51%) 0 0 / 120px 120px; }
-.sobre-para { position: relative; z-index: 1; font: italic 400 1.3rem var(--f-texto); color: var(--tinta-suave); margin-top: 14vh; }
+.sobre-tapa::after { /* papel de la tapa, dejando ver 1.5 px de filete dorado en los bordes diagonales */
+  content: ""; position: absolute; inset: 0 2px 0 2px;
+  clip-path: polygon(0 0, 100% 0, 50% calc(100% - 3px));
+}
+.sobre-tapa::before { /* segundo filete interior */
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  clip-path: polygon(evenodd, 6% 0, 94% 0, 50% 88%, 6% 0, 9% 2%, 91% 2%, 50% 84%, 9% 2%);
+  background: rgba(198, 160, 102, 0.55);
+}
+/* marco de líneas finas en el cuerpo (se ve en los lados y abajo) */
+.sobre-papel::after {
+  content: ""; position: absolute; inset: 9px; border: 1px solid rgba(198, 160, 102, 0.55); border-radius: 3px; pointer-events: none; z-index: 2;
+}
+/* sello de cera en la punta de la tapa */
 .sello {
-  position: relative; z-index: 2;
-  width: 8rem; height: 8rem; border: 0; border-radius: 47% 53% 50% 50% / 52% 46% 54% 48%;
-  background: radial-gradient(circle at 35% 30%, #4a6fbf, #1d3a7c 45%, #0c1b40 85%);
-  box-shadow: 0 12px 26px rgba(12, 27, 64, 0.45), inset 0 -5px 12px rgba(0, 0, 0, 0.35), inset 0 4px 8px rgba(255, 255, 255, 0.28);
+  position: absolute; left: 50%; top: 60%; z-index: 4; translate: -50% -50%;
+  width: clamp(5.2rem, 22vw, 6.6rem); height: clamp(5.2rem, 22vw, 6.6rem); border: 0;
+  border-radius: 47% 53% 50% 50% / 52% 46% 54% 48%;
+  background: radial-gradient(circle at 34% 28%, #5d84d6, #1f3f87 45%, #0b1b44 88%);
+  box-shadow: 0 8px 18px rgba(5, 13, 36, 0.55), inset 0 -5px 10px rgba(0, 0, 0, 0.4), inset 0 4px 7px rgba(255, 255, 255, 0.3);
   display: grid; place-items: center;
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  transition: transform 0.6s ease, opacity 0.5s ease;
   animation: latido 2.6s ease-in-out infinite;
 }
-.sello::before { content: ""; position: absolute; inset: 0.7rem; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.28); box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3); }
-.sello-iniciales { font: 400 3.6rem/1 var(--f-script); color: #f4f7ff; text-shadow: 0 2px 2px rgba(0, 0, 0, 0.35); }
+.sello::before { content: ""; position: absolute; inset: 0.55rem; border-radius: 50%; border: 1.5px solid rgba(231, 207, 156, 0.55); box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35); }
+.sello::after { /* gotas de cera alrededor */
+  content: ""; position: absolute; inset: -5px; border-radius: 50%; z-index: -1;
+  background: radial-gradient(circle at 15% 70%, #1f3f87 0 9%, transparent 10%), radial-gradient(circle at 88% 30%, #1f3f87 0 7%, transparent 8%), radial-gradient(circle at 70% 92%, #183573 0 6%, transparent 7%);
+}
+.sello-iniciales { font: 400 clamp(2.6rem, 11vw, 3.3rem)/1 var(--f-script); color: #f5e6c4; text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4); }
 .sello-iniciales i { font-style: normal; font-size: 0.6em; margin: 0 0.05em; }
-@keyframes latido { 50% { transform: scale(1.05); } }
-.sobre-toca { position: relative; z-index: 1; font: 500 0.78rem var(--f-texto); letter-spacing: 0.24em; text-transform: uppercase; color: var(--tinta-suave); }
-.sobre.abriendo .sobre-tapa { transform: rotateX(178deg); }
-.sobre.abriendo .sello { transform: scale(0.6) translateY(30px); opacity: 0; animation: none; }
+@keyframes latido { 50% { transform: scale(1.06); } }
+/* abrir */
+.sobre.abriendo .sello { transform: scale(0.4) rotate(-40deg); opacity: 0; animation: none; }
+.sobre.abriendo .sobre-tapa { transform: rotateX(180deg); z-index: 0; }
+.sobre.abriendo .sobre-carta { transform: translateY(-58%); z-index: 1; }
+.sobre.abriendo .sobre-papel { animation: none; transition: transform 1s ease 1.6s; transform: translateY(12vh) scale(0.9); }
 .sobre.abriendo .sobre-para, .sobre.abriendo .sobre-toca { opacity: 0; transition: opacity 0.4s; }
-.sobre.abriendo { opacity: 0; transform: translateY(-6%); pointer-events: none; }
+.sobre.abriendo { opacity: 0; visibility: hidden; pointer-events: none; }
 
 /* ============ Escena 3D fija ============ */
 .escena-3d { position: fixed; inset: 0; z-index: 0; pointer-events: none; will-change: opacity; }
@@ -267,6 +337,18 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
 .hoja .boton:hover { background: rgba(255, 255, 255, 0.12); }
 .hoja .boton-blanco { background: #fff; color: var(--marino); margin-right: 0.4rem; }
 .hoja .boton-blanco:hover { background: var(--cielo); }
+
+/* ============ Ubica tu mesa ============ */
+.ubica { text-align: center; }
+.ubica > p:not(.nota) { color: var(--tinta-suave); margin-bottom: 1.2rem; }
+.ubica-vista { position: relative; display: block; border-radius: 18px; overflow: hidden; border: 6px solid #fdfbf6; box-shadow: var(--sombra); }
+.ubica-vista img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; transition: transform 0.8s cubic-bezier(.2,.7,.2,1); }
+.ubica-vista:hover img { transform: scale(1.05); }
+.ubica-ver {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.75rem 1.3rem; border-radius: 999px; background: rgba(12, 27, 64, 0.82); color: #fff;
+  font: 600 0.8rem var(--f-texto); letter-spacing: 0.18em; text-transform: uppercase; animation: latido 2.6s ease-in-out infinite;
+}
 
 /* ============ Programa ============ */
 .programa .titulo { text-align: center; }
@@ -476,9 +558,9 @@ body.organizador-activo .compartir { border-color: var(--azul); box-shadow: 0 0 
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   animation: barra-entra 0.8s cubic-bezier(.2,1.2,.4,1) both;
 }
-.barra-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 0.15rem; }
-.barra-nav a { display: grid; place-items: center; width: 2.45rem; height: 2.45rem; border-radius: 50%; color: var(--tinta-suave); transition: background-color 0.3s, color 0.3s, transform 0.2s; }
-.barra-nav a svg { width: 1.3rem; height: 1.3rem; }
+.barra-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 0.1rem; }
+.barra-nav a { display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%; color: var(--tinta-suave); transition: background-color 0.3s, color 0.3s, transform 0.2s; }
+.barra-nav a svg { width: 1.2rem; height: 1.2rem; }
 .barra-nav a.activo, .barra-nav a:hover { background: var(--marino); color: #fff; box-shadow: 0 4px 10px rgba(20, 42, 92, 0.3); }
 .barra-nav a:active { transform: scale(0.92); }
 @keyframes barra-entra { from { translate: -50% 140%; opacity: 0; } }

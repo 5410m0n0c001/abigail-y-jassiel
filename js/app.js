@@ -37,7 +37,7 @@
     requestAnimationFrame(() => btnCompartir.classList.add('entra'));
     // con el sobre cerrado la página medía una pantalla: las animaciones recalculan sus posiciones
     requestAnimationFrame(() => window.refrescarAnimaciones?.());
-    setTimeout(() => { sobre.remove(); window.refrescarAnimaciones?.(); recorrido(); }, 2400);
+    setTimeout(() => { sobre.remove(); window.refrescarAnimaciones?.(); recorrido(); }, 2700);
   }
   // el sello es el botón accesible; tocar cualquier parte del sobre también abre
   sobre.addEventListener('click', abrirSobre);

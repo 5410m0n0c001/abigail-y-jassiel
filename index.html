@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="googlebot" content="notranslate">
-  <meta name="theme-color" content="#142a5c">
+  <meta name="theme-color" content="#050d24">
   <title>Abigail & Jasiel · Nuestra boda</title>
   <meta name="description" content="Abigail y Jasiel te invitan a celebrar su boda el domingo 13 de diciembre de 2026 en Jardín Mina Real. ¡Acompáñanos y confirma tu asistencia!">
   <link rel="canonical" href="https://5410m0n0c001.github.io/abigail-y-jassiel/">
@@ -33,7 +33,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Updock&display=swap" rel="stylesheet">
   <link rel="preload" href="models/rosa.glb" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
-  <link rel="stylesheet" href="css/boda.css?v=20261013">
+  <link rel="stylesheet" href="css/boda.css?v=20261013b">
+  <link rel="stylesheet" href="css/tema-noche.css?v=20261013b">
 
   <script type="importmap">
     {
@@ -101,6 +102,9 @@
     </defs>
   </svg>
 
+  <!-- Cielo nocturno con polvo de estrellas (tema noche) -->
+  <div class="cielo" aria-hidden="true"><i class="lejos"></i><i class="cerca"></i></div>
+
   <!-- Foto de portada: capa fija detrás de la escena 3D; sube con el scroll al terminar la portada.
        Para el video de portada: cambiar el <img> por <video autoplay muted loop playsinline poster="img/foto-09.jpg" src="video/portada.mp4"> -->
   <div class="portada-foto" aria-hidden="true"><img src="img/foto-09.jpg" alt="" width="1066" height="1600" fetchpriority="high"></div>
@@ -108,15 +112,25 @@
   <!-- Capa fija de la escena 3D: viaja con el scroll detrás del contenido -->
   <div class="escena-3d" id="escena-3d" aria-hidden="true"></div>
 
-  <!-- SOBRE con sello de cera (Carmesí) -->
+  <!-- SOBRE (Carmesí): sobre de papel marfil con tapa, solapas, filete dorado y sello de cera -->
   <div class="sobre" id="sobre" role="dialog" aria-label="Invitación cerrada">
-    <div class="sobre-fondo"></div>
-    <div class="sobre-tapa"></div>
-    <p class="sobre-para">Una invitación para ti</p>
-    <button class="sello" id="sello" type="button" aria-label="Abrir invitación">
-      <span class="sello-iniciales">A<i>&amp;</i>J</span>
-    </button>
-    <p class="sobre-toca">Toca para abrir</p>
+    <p class="sobre-para" id="sobre-para">Una invitación para ti</p>
+    <div class="sobre-papel">
+      <div class="sobre-cuerpo"></div>
+      <div class="sobre-carta" aria-hidden="true">
+        <span class="carta-sup">Nuestra boda</span>
+        <span class="carta-nombres">Abigail &amp; Jasiel</span>
+        <span class="carta-fecha">13 · diciembre · 2026</span>
+      </div>
+      <div class="sobre-lado sobre-izq"></div>
+      <div class="sobre-lado sobre-der"></div>
+      <div class="sobre-abajo"></div>
+      <div class="sobre-tapa"></div>
+      <button class="sello" id="sello" type="button" aria-label="Abrir invitación">
+        <span class="sello-iniciales">A<i>&amp;</i>J</span>
+      </button>
+    </div>
+    <p class="sobre-toca">Toca el sello para abrir</p>
   </div>
 
   <!-- Llegada desde el QR de las mesas (?action=take-photo) -->
@@ -133,6 +147,7 @@
       <li><a href="#portada" aria-label="Inicio"><svg><use href="#i-casa"/></svg></a></li>
       <li><a href="#fecha" aria-label="Fecha"><svg><use href="#i-calendario"/></svg></a></li>
       <li><a href="#lugares" aria-label="Ubicación"><svg><use href="#i-pin"/></svg></a></li>
+      <li><a href="#ubica" aria-label="Ubica tu mesa"><svg><use href="#i-cubo"/></svg></a></li>
       <li><a href="#programa" aria-label="Minuto a minuto"><svg><use href="#i-reloj"/></svg></a></li>
       <li><a href="#menu" aria-label="Menú"><svg><use href="#i-plato"/></svg></a></li>
       <li><a href="#regalos" aria-label="Regalos"><svg><use href="#i-regalo"/></svg></a></li>
@@ -251,8 +266,19 @@
       </article>
     </section>
 
+    <!-- UBICA TU MESA (demo): croquis 3D del jardín -->
+    <section class="ubica bloque" id="ubica" data-lado="izq" data-ancho data-3d="pin">
+      <h2 class="titulo revelar">Ubica tu mesa</h2>
+      <p class="revelar">Recorre en 3D el jardín: la ceremonia, el cóctel, la pista y las mesas.</p>
+      <a class="ubica-vista revelar" href="mapa.html">
+        <img src="img/croquis-vista.jpg" alt="Vista 3D del jardín con la ceremonia, la mesa principal, las mesas numeradas y la pista" width="1000" height="500" loading="lazy">
+        <span class="ubica-ver"><svg><use href="#i-cubo"/></svg>Ver en 3D</span>
+      </a>
+      <p class="nota revelar pendiente">Croquis provisional: se actualizará con las medidas del jardín</p>
+    </section>
+
     <!-- PROGRAMA: minuto a minuto (checklist) -->
-    <section class="programa bloque" id="programa" data-lado="izq" data-ancho data-3d="campanas">
+    <section class="programa bloque porcelana" id="programa" data-lado="izq" data-ancho data-3d="campanas">
       <h2 class="titulo revelar">Minuto a minuto</h2>
       <ol class="linea">
         <li class="revelar"><svg><use href="#i-anillos"/></svg><time datetime="16:00">4:00 <small>pm</small></time><span>Ceremonia religiosa <em>Jardín con vista al cerro</em></span></li>
@@ -299,7 +325,7 @@
     </section>
 
     <!-- MENÚ con pestañas (demo) -->
-    <section class="menu bloque" id="menu" data-lado="izq" data-3d="banquete">
+    <section class="menu bloque porcelana" id="menu" data-lado="izq" data-3d="banquete">
       <h2 class="titulo revelar">Menú</h2>
       <div class="menu-pestanas revelar" role="tablist">
         <button type="button" role="tab" aria-selected="true" aria-controls="menu-banquete" id="tab-banquete">Banquete</button>
@@ -379,7 +405,7 @@
     </section>
 
     <!-- REGALOS -->
-    <section class="regalos bloque" id="regalos" data-lado="izq" data-3d="regalo">
+    <section class="regalos bloque porcelana" id="regalos" data-lado="izq" data-3d="regalo">
       <h2 class="titulo revelar">Mesa de regalos</h2>
       <p class="regalos-lema revelar">Tu presencia es nuestro mejor regalo</p>
       <div class="regalos-grid">
@@ -630,7 +656,7 @@
     <span>Compartir</span>
   </button>
 
-  <!-- Música (provisional: canción de Primavera Events Group) -->
+  <!-- Música (provisional: "Cinematic Climax & DJ Outro") -->
   <button class="musica" id="musica" type="button" aria-label="Pausar música" hidden>
     <svg class="ico-on"><use href="#i-sonido"/></svg><svg class="ico-off"><use href="#i-silencio"/></svg>
   </button>

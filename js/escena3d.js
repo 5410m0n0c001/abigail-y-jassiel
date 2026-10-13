@@ -151,7 +151,7 @@ async function iniciar() {
   geo.setAttribute('aFase', new THREE.BufferAttribute(fase, 1));
   geo.setAttribute('aTam', new THREE.BufferAttribute(tamanos, 1));
   const matDestello = new THREE.ShaderMaterial({
-    transparent: true, depthWrite: false,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, // brillan sobre el cielo nocturno
     uniforms: { uT: { value: 0 }, uPR: { value: pr }, uBrillo: { value: 0.3 } },
     vertexShader: /* glsl */`
       attribute float aFase; attribute float aTam;

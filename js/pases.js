@@ -24,6 +24,8 @@
     etiqueta.textContent = 'Invitación para';
     p.append(etiqueta, document.createTextNode(para)); // texto plano: nunca HTML del enlace
     p.hidden = false;
+    const sobrePara = document.getElementById('sobre-para');
+    if (sobrePara) sobrePara.textContent = `Para: ${para}`; // el sobre lleva el nombre del invitado
   }
 
   const seccion = $('#mis-pases');
