@@ -103,6 +103,7 @@ svg { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-wi
 
 /* ============ Escena 3D fija ============ */
 .escena-3d { position: fixed; inset: 0; z-index: 0; pointer-events: none; will-change: opacity; }
+.escena-3d.al-frente { z-index: 2; } /* sobre las fotos mientras entran */
 .escena-3d canvas { display: block; width: 100% !important; height: 100% !important; }
 main { position: relative; z-index: 1; overflow-x: clip; }
 
@@ -182,17 +183,16 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
 .para-quien { margin: -0.6rem 0 1.4rem; font: italic 400 1.45rem var(--f-texto); color: var(--azul); }
 .para-quien span { display: block; font: 500 0.7rem var(--f-texto); font-style: normal; letter-spacing: 0.35em; text-transform: uppercase; color: var(--tinta-suave); margin-bottom: 0.3rem; }
 
-/* ============ Cadena de rosas 3D ============ */
-.cadena { position: relative; height: clamp(4.5rem, 18vw, 7rem); overflow: hidden; margin: 0.5rem 0; pointer-events: none; }
-.cadena-tira { display: flex; align-items: center; width: max-content; height: 100%; }
-.flor { flex: none; width: calc(clamp(4.5rem, 18vw, 7rem) * var(--tam, 1)); margin-right: -1.6rem; translate: 0 var(--dy, 0); }
-.flor img { width: 100%; height: auto; transform-origin: 50% 70%; filter: drop-shadow(0 8px 10px rgba(20, 42, 92, 0.22)); }
-/* cada flor se mece sola, con su propio ritmo (no se ven como recortes pegados) */
-.flor img { animation: mecer var(--dur, 4s) ease-in-out var(--ret, 0s) infinite alternate; }
-@keyframes mecer {
-  from { transform: rotate(calc(var(--r) - 9deg)) translateY(-3%) scale(0.97); }
-  to { transform: rotate(calc(var(--r) + 9deg)) translateY(3%) scale(1.03); }
+/* ============ Guirnaldas: rosas que florecen con el scroll ============ */
+.cadena { position: relative; height: clamp(10rem, 44vw, 15rem); margin: 0.5rem 0; pointer-events: none; }
+.guirnalda-rama { position: absolute; left: calc(8% + var(--x) * 0.84); top: 52%; width: clamp(6rem, 28vw, 10rem); height: auto; translate: -50% -50%; rotate: var(--r); opacity: 0.95; }
+.flor {
+  position: absolute; left: calc(8% + var(--x) * 0.84); top: var(--y); width: calc(clamp(7.5rem, 34vw, 12rem) * var(--w, 1)); aspect-ratio: 1;
+  translate: -50% -50%; transform: rotate(var(--rot, 0deg)) scale(var(--esc, 0.55)); transform-origin: 50% 60%;
+  filter: drop-shadow(0 10px 12px rgba(12, 27, 64, 0.28));
 }
+.flor img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
+.flor img:first-child { opacity: 1; }
 /* rosas grandes que entran girando por los costados (decoraciones de Carmesí) */
 .flor-lado { position: absolute; top: -2.5rem; width: clamp(7rem, 30vw, 13rem); height: auto; z-index: -1; pointer-events: none; opacity: 0.9; filter: drop-shadow(0 12px 16px rgba(20, 42, 92, 0.2)); }
 .flor-izq { left: -3.5rem; }
@@ -544,7 +544,6 @@ body.organizador-activo .compartir { border-color: var(--azul); box-shadow: 0 0 
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .flor img { animation: none; }
   .revelar { opacity: 1; transform: none; transition: none; }
   .sello { animation: none; }
   .portada { height: 100svh; }

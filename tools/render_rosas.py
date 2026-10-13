@@ -42,7 +42,7 @@ for nombre, rot, energia in (('Key', (50, 0, 35), 4), ('Rim', (60, 0, 210), 3), 
 cam = bpy.data.objects.new('Cam', bpy.data.cameras.new('Cam')); esc.collection.objects.link(cam); esc.camera = cam
 cam.data.type = 'ORTHO'
 
-def render(nombre, mat, apertura, con_tallo, elev, giro, escala, exposicion=0):
+def render(nombre, mat, apertura, con_tallo, elev, giro, escala, exposicion=0, fijo=None):
     esc.view_settings.exposure = exposicion
     rosa.data.materials.clear(); rosa.data.materials.append(mat)
     rosa.data.shape_keys.key_blocks['Abierta'].value = apertura
@@ -54,6 +54,7 @@ def render(nombre, mat, apertura, con_tallo, elev, giro, escala, exposicion=0):
     if con_tallo: pts += [rosa.matrix_world @ Vector(c) for c in rosa.bound_box]
     cx, cy, cz = (sum(p[i] for p in pts) / len(pts) for i in range(3))
     tam = max(max(p[i] for p in pts) - min(p[i] for p in pts) for i in range(3))
+    if fijo: cx, cy, cz, tam = fijo  # encuadre fijo (secuencias de floración)
     d = 6; e, g = math.radians(elev), math.radians(giro)
     cam.location = (cx + d * math.cos(e) * math.sin(g), cy - d * math.cos(e) * math.cos(g), cz + d * math.sin(e))
     direccion = (cx - cam.location.x, cy - cam.location.y, cz - cam.location.z)
@@ -70,3 +71,22 @@ render('boton-azul', azul, 0.15, False, 30, 120, 1.3)
 render('rosa-blanca', blanca, 0.95, False, 50, 250, 1.15, 1.3)
 render('boton-blanco-1', blanca, 0.12, False, 25, 80, 1.3, 1.3)
 render('boton-blanco-2', blanca, 0.3, False, 45, 200, 1.3, 1.3)
+
+# ---------- secuencias de floración (divisores): misma cámara, de botón a abierta ----------
+APERTURAS = (0.0, 0.2, 0.4, 0.6, 0.8, 1.0)
+for nombre, m, elev, giro, expo in (('flor-azul', azul, 42, 30, 0), ('flor-blanca', blanca, 42, 200, 1.3)):
+    # encuadre fijo al tamaño de la flor abierta para que las etapas no "salten"
+    from mathutils import Vector
+    rosa.data.shape_keys.key_blocks['Abierta'].value = 1.0
+    bpy.context.view_layer.update()
+    ev = rosa.evaluated_get(bpy.context.evaluated_depsgraph_get()).to_mesh()
+    pts = [rosa.matrix_world @ v.co for v in ev.vertices]
+    centro = [(max(p[i] for p in pts) + min(p[i] for p in pts)) / 2 for i in range(3)]
+    tam = max(max(p[i] for p in pts) - min(p[i] for p in pts) for i in range(3))
+    for i, a in enumerate(APERTURAS):
+        render(f'{nombre}-{i}', m, a, False, elev, giro, 1.1, expo, (*centro, tam))
+
+# rama con hojas (sin flor) para enlazar las flores del divisor
+rosa.hide_render = True
+render('rama', azul, 0, True, 10, 90, 1.0)
+rosa.hide_render = False

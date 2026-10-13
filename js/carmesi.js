@@ -1,8 +1,7 @@
 // Animaciones al estilo de la invitación Carmesí (GSAP + ScrollTrigger), con elementos 3D:
 //  - Imágenes (fotos, galería, tarjetas, hojas de lugares): entran por los lados girando desde la esquina
 //    y se acomodan al ritmo del scroll (scrub), alternando izquierda/derecha.
-//  - Cadenas de rosas azules y blancas (renders 3D de models/rosa.glb): cada flor brota girando,
-//    se mece sola y la cadena se desliza con el scroll.
+//  - Guirnaldas de rosas azules y blancas (renders 3D de models/rosa.glb) que florecen con el scroll.
 //  - Rosas grandes que entran girando por los costados entre secciones (decoraciones "reloj" de Carmesí).
 //  - Pétalos azules y blancos cayendo sobre la portada.
 // Con "reducir movimiento" o sin GSAP, todo queda en su lugar sin animación.
@@ -11,30 +10,66 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const azar = (a, b) => a + Math.random() * (b - a);
 
-  // ---------- cadenas de rosas: cada flor en su propio contenedor para mecerse ----------
-  const SPRITES = ['rosa-azul-1', 'boton-blanco-1', 'rosa-blanca', 'boton-azul', 'rosa-azul-2', 'boton-blanco-2'];
+  // ---------- guirnaldas (divisores): rosas que florecen con el scroll ----------
+  // Cada flor apila 6 etapas renderizadas en Blender (img/deco/flor/*-0..5.webp, de botón a abierta);
+  // al avanzar el scroll se funden de una etapa a la siguiente, la flor crece y gira un poco.
+  // Es reversible: si se regresa, la flor se vuelve a cerrar.
+  const ETAPAS = 6;
+  const flores = [];
   $$('.cadena').forEach((cadena, c) => {
-    const tira = document.createElement('div');
-    tira.className = 'cadena-tira';
-    for (let i = 0; i < 16; i++) {
+    const n = 5;
+    for (let i = 0; i < n; i++) {
+      if (i < n - 1) { // ramas con hojas entre flor y flor
+        const rama = document.createElement('img');
+        rama.className = 'guirnalda-rama';
+        rama.src = 'img/deco/flor/rama.webp';
+        rama.alt = '';
+        rama.style.setProperty('--x', `${((i + 0.5) / (n - 1)) * 100}%`);
+        rama.style.setProperty('--r', `${90 + azar(-25, 25)}deg`);
+        cadena.append(rama);
+      }
+      const color = (i + c) % 3 === 1 ? 'blanca' : 'azul';
       const flor = document.createElement('span');
       flor.className = 'flor';
-      const tam = azar(0.72, 1.18);
-      flor.style.setProperty('--tam', tam.toFixed(2));
-      flor.style.setProperty('--r', `${azar(-28, 28).toFixed(0)}deg`);
-      flor.style.setProperty('--dy', `${azar(-14, 14).toFixed(0)}%`);
-      flor.style.setProperty('--dur', `${azar(3.2, 6).toFixed(1)}s`);
-      flor.style.setProperty('--ret', `${azar(-6, 0).toFixed(1)}s`);
-      flor.style.zIndex = Math.round(tam * 10);
-      const img = document.createElement('img');
-      img.src = `img/deco/${SPRITES[(i + c * 2) % SPRITES.length]}.webp`;
-      img.alt = '';
-      img.loading = 'lazy';
-      flor.append(img);
-      tira.append(flor);
+      flor.style.setProperty('--x', `${(i / (n - 1)) * 100}%`);
+      flor.style.setProperty('--y', `${50 + Math.sin(i * 1.7 + c) * 14}%`);
+      flor.style.setProperty('--w', `${azar(0.85, 1.15).toFixed(2)}`);
+      flor.style.zIndex = 10 + Math.round(azar(0, 9));
+      for (let k = 0; k < ETAPAS; k++) {
+        const img = document.createElement('img');
+        img.src = `img/deco/flor/flor-${color}-${k}.webp`;
+        img.alt = '';
+        img.loading = 'lazy';
+        flor.append(img);
+      }
+      cadena.append(flor);
+      // cada flor abre en su propio momento (orden alternado, no de izquierda a derecha)
+      flores.push({ el: flor, cadena, retraso: ((i * 3 + c) % n) / n * 0.35, giro: azar(-35, 35), imgs: [...flor.children] });
     }
-    cadena.append(tira);
   });
+  const clamp01 = (v) => Math.min(1, Math.max(0, v));
+  let pendienteF = false;
+  function florecer() {
+    pendienteF = false;
+    const cache = new Map();
+    for (const f of flores) {
+      let p = cache.get(f.cadena);
+      if (p === undefined) {
+        const r = f.cadena.getBoundingClientRect();
+        // 0 cuando la guirnalda asoma por abajo; 1 cuando llega al 35 % superior de la pantalla
+        p = reducir ? 1 : clamp01((innerHeight - r.top) / (innerHeight * 0.75));
+        cache.set(f.cadena, p);
+      }
+      const local = clamp01((p - f.retraso) / 0.6);
+      const e = local * (ETAPAS - 1);
+      f.imgs.forEach((img, k) => { img.style.opacity = clamp01(1 - Math.abs(e - k)).toFixed(3); });
+      f.el.style.setProperty('--esc', (0.55 + 0.45 * local).toFixed(3));
+      f.el.style.setProperty('--rot', `${(f.giro * (1 - local) * 2 + f.giro * 0.25).toFixed(1)}deg`);
+    }
+  }
+  addEventListener('scroll', () => { if (!pendienteF) { pendienteF = true; requestAnimationFrame(florecer); } }, { passive: true });
+  addEventListener('resize', florecer);
+  florecer();
 
   // ---------- rosas grandes que entran por los costados ----------
   const LADOS = [
@@ -77,32 +112,22 @@
 
     // entrada lateral con giro desde la esquina (fotoGsap de Carmesí), ligada al scroll
     const entrarDeLado = (el, derecha, { x = 60, y = 25, giro = 18, start = 'top 92%', end = 'top 45%', scrub = 1.2 } = {}) => {
+      el.classList.remove('revelar'); // la transición CSS frenaría el scrub
       gsap.fromTo(el,
         { xPercent: derecha ? x : -x, yPercent: y, rotation: derecha ? giro : -giro, opacity: 0.2, transformOrigin: derecha ? 'bottom right' : 'bottom left' },
         { xPercent: 0, yPercent: 0, rotation: 0, opacity: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start, end, scrub } });
     };
 
-    $$('.foto-slide .foto-full').forEach((img, i) => entrarDeLado(img, i % 2 !== 0, { x: 55, giro: 25, scrub: 2 }));
+    $$('.foto-slide .foto-full').forEach((img, i) => entrarDeLado(img, i % 2 !== 0, { x: 75, y: 35, giro: 32, start: 'top 95%', end: 'top 25%', scrub: 1.6 }));
     $$('.hoja').forEach((hoja) => entrarDeLado(hoja, hoja.dataset.entra === 'der', { x: 65, y: 30, giro: 12, start: 'top 98%', end: 'top 60%', scrub: 0.6 }));
-    $$('#mosaico .m').forEach((m, i) => entrarDeLado(m, i % 2 !== 0, { x: 70, y: 20, giro: 14, start: 'top 100%', end: 'top 65%', scrub: 1 }));
-    $$('.tarjeta, .menu-panel, .album-qr, .despedida-foto').forEach((t, i) => entrarDeLado(t, i % 2 === 0, { x: 40, y: 15, giro: 8, start: 'top 98%', end: 'top 70%', scrub: 0.8 }));
+    $$('#mosaico .m').forEach((m, i) => entrarDeLado(m, i % 2 !== 0, { x: 85, y: 25, giro: 22, start: 'top 100%', end: 'top 45%', scrub: 1.2 }));
+    $$('.despedida-foto').forEach((t) => entrarDeLado(t, true, { x: 75, y: 35, giro: 30, start: 'top 95%', end: 'top 30%', scrub: 1.6 }));
+    $$('.tarjeta, .menu-panel, .album-qr').forEach((t, i) => entrarDeLado(t, i % 2 === 0, { x: 40, y: 15, giro: 8, start: 'top 98%', end: 'top 65%', scrub: 0.8 }));
 
     // cuenta regresiva: cada cuadro cae girando
     gsap.from('#cuenta > div', {
       y: -50, rotation: (i) => (i % 2 ? 12 : -12), opacity: 0, duration: 0.9, ease: 'back.out(2)', stagger: 0.1,
       scrollTrigger: { trigger: '#cuenta', start: 'top 90%', once: true },
-    });
-
-    // cadenas: la tira se desliza y cada flor brota girando cuando la cadena entra a la pantalla
-    $$('.cadena').forEach((cadena) => {
-      const dir = +cadena.dataset.dir || 1;
-      gsap.fromTo(cadena.querySelector('.cadena-tira'),
-        { xPercent: dir > 0 ? -30 : 0 },
-        { xPercent: dir > 0 ? 0 : -30, ease: 'none', scrollTrigger: { trigger: cadena, start: 'top bottom', end: 'bottom top', scrub: 1 } });
-      gsap.from(cadena.querySelectorAll('.flor'), { // el contenedor: la imagen ya trae su vaivén en CSS
-        scale: 0, rotation: () => azar(-200, 200), y: 40, duration: 1.2, ease: 'back.out(1.6)', stagger: { each: 0.06, from: 'random' },
-        scrollTrigger: { trigger: cadena, start: 'top 95%', once: true },
-      });
     });
 
     // rosas de los costados: entran rodando desde fuera de la pantalla y luego giran despacio

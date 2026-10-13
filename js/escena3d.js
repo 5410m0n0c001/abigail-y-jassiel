@@ -24,6 +24,7 @@ const portada = document.getElementById('portada');
 const slotCierre = document.querySelector('[data-rosa-slot="cierre"]');
 const slotFinal = document.querySelector('[data-rosa-slot="final"]');
 const secciones = [...document.querySelectorAll('[data-lado]')];
+const frentes = [...document.querySelectorAll('[data-frente]')];
 const ESCALA_OBJETO = 0.85; // los objetos miden más que la cabeza de la rosa
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -42,6 +43,8 @@ function pose(el) {
     case 'izq':
     case 'der': {
       const lado = tipo === 'izq' ? -1 : 1;
+      // fotos: el objeto pasa POR DELANTE mientras la foto entra girando (se cruzan)
+      if (el.hasAttribute('data-frente')) return pc ? { x: 0.3 * lado, y: 0.1, s: 0.62, a: 1, o: 1, m } : { x: 0.45 * lado, y: 0.18, s: 0.5, a: 1, o: 1, m };
       if (pc) return { x: 0.52 * lado, y: 0, s: 0.72, a: 1, o: 1, m };
       // celular: secciones de texto → el objeto se asoma por su lado y el texto se recorre al otro (CSS).
       // Secciones a todo lo ancho (fotos, fecha, galería, álbum) → solo se asoma por la orilla.
@@ -298,6 +301,10 @@ async function iniciar() {
     matDestello.uniforms.uBrillo.value = lerp(0.35, 0.9, modeloActual === 'rosa' ? a : 1) * clamp01(actual.o * 1.4);
     matDestello.uniforms.uT.value = t;
     capa.style.opacity = actual.o.toFixed(3);
+    // la capa 3D sube por encima del contenido mientras una foto cruza el centro de la pantalla
+    let alFrente = false;
+    for (const f of frentes) { const r = f.getBoundingClientRect(); if (r.top < innerHeight * 0.75 && r.bottom > innerHeight * 0.25) { alFrente = true; break; } }
+    capa.classList.toggle('al-frente', alFrente);
     renderer.render(scene, camera);
   }
 
