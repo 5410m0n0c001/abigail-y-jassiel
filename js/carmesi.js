@@ -111,17 +111,17 @@
     document.body.classList.add('con-gsap');
 
     // entrada lateral con giro desde la esquina (fotoGsap de Carmesí), ligada al scroll
-    const entrarDeLado = (el, derecha, { x = 60, y = 25, giro = 18, start = 'top 92%', end = 'top 45%', scrub = 1.2 } = {}) => {
+    const entrarDeLado = (el, derecha, { x = 60, y = 25, giro = 18, start = 'top bottom', end = 'center 55%', scrub = 0.8, ease = 'sine.inOut' } = {}) => {
       el.classList.remove('revelar'); // la transición CSS frenaría el scrub
       gsap.fromTo(el,
         { xPercent: derecha ? x : -x, yPercent: y, rotation: derecha ? giro : -giro, opacity: 0.2, transformOrigin: derecha ? 'bottom right' : 'bottom left' },
-        { xPercent: 0, yPercent: 0, rotation: 0, opacity: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start, end, scrub } });
+        { xPercent: 0, yPercent: 0, rotation: 0, opacity: 1, ease, scrollTrigger: { trigger: el, start, end, scrub } });
     };
 
-    $$('.foto-slide .foto-full').forEach((img, i) => entrarDeLado(img, i % 2 !== 0, { x: 75, y: 35, giro: 32, start: 'top 95%', end: 'top 25%', scrub: 1.6 }));
+    $$('.foto-slide .foto-full').forEach((img, i) => entrarDeLado(img, i % 2 !== 0, { x: 55, y: 25, giro: 28 }));
     $$('.hoja').forEach((hoja) => entrarDeLado(hoja, hoja.dataset.entra === 'der', { x: 65, y: 30, giro: 12, start: 'top 98%', end: 'top 60%', scrub: 0.6 }));
-    $$('#mosaico .m').forEach((m, i) => entrarDeLado(m, i % 2 !== 0, { x: 85, y: 25, giro: 22, start: 'top 100%', end: 'top 45%', scrub: 1.2 }));
-    $$('.despedida-foto').forEach((t) => entrarDeLado(t, true, { x: 75, y: 35, giro: 30, start: 'top 95%', end: 'top 30%', scrub: 1.6 }));
+    $$('#mosaico .m').forEach((m, i) => entrarDeLado(m, i % 2 !== 0, { x: 85, y: 25, giro: 22, end: 'center 60%' }));
+    $$('.despedida-foto').forEach((t) => entrarDeLado(t, true, { x: 55, y: 25, giro: 28 }));
     $$('.tarjeta, .menu-panel, .album-qr').forEach((t, i) => entrarDeLado(t, i % 2 === 0, { x: 40, y: 15, giro: 8, start: 'top 98%', end: 'top 65%', scrub: 0.8 }));
 
     // cuenta regresiva: cada cuadro cae girando
