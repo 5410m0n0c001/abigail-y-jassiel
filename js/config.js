@@ -1,0 +1,32 @@
+// Datos del evento que usa el JavaScript. Los textos visibles viven en index.html.
+// Lo marcado como PENDIENTE se confirma con los novios (ver README.md → "Pendientes").
+window.INVITACION = {
+  // Inicio de la ceremonia con zona horaria (centro de México = UTC-6)
+  fechaEvento: '2026-12-13T16:00:00-06:00',
+  finEvento: '2026-12-13T22:00:00-06:00',
+  titulo: 'Boda de Abigail & Jasiel',
+  lugar: 'Jardín Mina Real',
+
+  // PENDIENTE: WhatsApp que recibe confirmaciones y el buzón de deseos (lada + número, sin espacios).
+  // Mientras esté vacío, los botones avisan que la confirmación se habilitará pronto.
+  whatsapp: '',
+
+  // PENDIENTE: enlace de Google Maps del jardín (los botones "Cómo llegar" lo usan)
+  mapa: '',
+
+  // PENDIENTE: coordenadas del jardín para el pronóstico del clima (Windy)
+  clima: { lat: null, lon: null },
+
+  album: {
+    supabaseUrl: 'https://fhnnqmbbeeobassvfeox.supabase.co',
+    supabaseKey: 'sb_publishable_JV54Q8BDmg5XDXsq7NwO6Q_YDPBOLrm', // clave pública (publishable)
+    bucket: 'fotos-album',
+    albumId: 'boda-abigail-jasiel-2026', // álbum propio de esta boda
+    fotosPorPagina: 24,
+    // compresión en el navegador
+    maxLado: 1600,               // px del lado largo de la foto grande
+    maxBytes: 600 * 1024,        // objetivo de peso de la foto grande
+    miniLado: 480,               // px del lado largo de la miniatura
+    maxArchivos: 10,             // fotos por envío
+  },
+};
