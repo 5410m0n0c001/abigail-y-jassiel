@@ -8,21 +8,24 @@ Invitación estática (HTML/CSS/JS, sin build) que fusiona tres invitaciones:
 - **XV Azul 3D** (funciones): escena 3D fija que acompaña el scroll, álbum en Supabase con cámara,
   ruleta de 200 retos, QR para mesas, pases personalizados, panel de organizador, buzón de deseos y
   botón de compartir que florece en rosa.
-- **Demo** (funciones): agendar en el calendario, menú con pestañas, hospedaje, clima, navegación rápida,
+- **Demo** (funciones): agendar en el calendario (botón nativo: `boda-abigail-jasiel.ics` en iPhone, Google
+  Calendar en Android), menú con pestañas, hospedaje, clima, barra de navegación inferior, **Ubica tu mesa**
+  (`mapa.html`: croquis 3D con model-viewer),
   recorrido guiado la primera vez y confeti cuando llega la hora del evento.
 
 Publicación: https://5410m0n0c001.github.io/abigail-y-jassiel/ (repo `5410m0n0c001/abigail-y-jassiel`).
 
 ## La escena 3D
-- `js/escena3d.js`: la **rosa roja** (`models/rosa.glb`, morph "Abierta") se abre con el scroll en la portada.
+- `js/escena3d.js`: la **rosa azul** (`models/rosa.glb`, morph "Abierta") se abre con el scroll en la portada.
   Después el objeto **cambia según la sección**: cada `<section>` lleva `data-lado="izq|der|cierre|final"`
   (dónde se coloca) y `data-3d="…"` (qué objeto se muestra). Al cambiar, el objeto se encoge girando y
   aparece el siguiente. En el RSVP la rosa vuelve cerrada.
 - `js/modelos3d.js`: objetos hechos con geometría de Three.js (sin descargas): `anillos`, `corazon`, `reloj`
   (marca las 4:00, la hora de la ceremonia), `pin`, `campanas`, `copa` (azul y transparente, como las del
   montaje), `banquete`, `monio`, `regalo`, `clima`, `camara`, `instagram`, `sobre`.
-- `img/deco/*.webp`: rosas rojas y botones blancos renderizados en Blender desde el mismo modelo
-  (`tools/render_rosas.py`); se usan en las cadenas y en los pases.
+- `img/deco/*.webp`: rosas azules, rosa blanca y botones renderizados en Blender desde el mismo modelo
+  (`tools/render_rosas.py`); se usan en las cadenas (cada flor se mece y brota girando), en las rosas
+  que entran por los costados y en los pases.
 - Sin WebGL se ven imágenes de respaldo; con "reducir movimiento" no hay animaciones.
 
 ## Archivos
@@ -36,6 +39,8 @@ Publicación: https://5410m0n0c001.github.io/abigail-y-jassiel/ (repo `5410m0n0c
 - `js/album.js`, `js/retos.js`: álbum (`albumId: boda-abigail-jasiel-2026`) y ruleta de retos de boda.
 - `p/N.html` + `img/pases/og-N.jpg`: vista previa en WhatsApp de enlaces con N lugares (1 a 20).
 - `tools/generar-imagenes.sh` + `tools/tarjeta.html`: regeneran pases y vistas previas (Chrome sin ventana).
+- `tools/croquis.py`: genera `models/croquis.glb` (PROVISIONAL, desde el checklist; rehacer con las medidas
+  reales del jardín y comprimir con `npx @gltf-transform/cli optimize ... --compress quantize`).
 - `originales/`: fotos de la preboda tal como llegaron (no se publican).
 
 ## Pendientes con los novios

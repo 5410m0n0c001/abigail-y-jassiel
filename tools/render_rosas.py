@@ -22,7 +22,7 @@ def material(nombre, color, sheen, gamma=0.6):
     p.inputs['Sheen Weight'].default_value = 0.6
     p.inputs['Sheen Tint'].default_value = sheen
     return m
-roja = material('Roja', (0.75, 0.004, 0.02, 1), (1, 0.3, 0.35, 1))
+azul = material('Azul', (0.03, 0.12, 0.55, 1), (0.55, 0.7, 1, 1))
 blanca = material('Blanca', (1, 0.97, 0.93, 1), (1, 1, 1, 1), 0.12)
 hoja = bpy.data.materials.new('Tallo'); hoja.use_nodes = True
 hp = hoja.node_tree.nodes['Principled BSDF']; hp.inputs['Base Color'].default_value = (0.05, 0.16, 0.07, 1); hp.inputs['Roughness'].default_value = 0.5
@@ -63,8 +63,10 @@ def render(nombre, mat, apertura, con_tallo, elev, giro, escala, exposicion=0):
     esc.render.filepath = os.path.join(salida, nombre + '.png')
     bpy.ops.render.render(write_still=True)
 
-render('rosa-roja-1', roja, 1.0, False, 55, 20, 1.15)
-render('rosa-roja-2', roja, 0.8, False, 30, 140, 1.15)
-render('rosa-roja-tallo', roja, 0.9, True, 25, 60, 1.05)
+render('rosa-azul-1', azul, 1.0, False, 55, 20, 1.15)
+render('rosa-azul-2', azul, 0.8, False, 30, 140, 1.15)
+render('rosa-azul-tallo', azul, 0.9, True, 25, 60, 1.05)
+render('boton-azul', azul, 0.15, False, 30, 120, 1.3)
+render('rosa-blanca', blanca, 0.95, False, 50, 250, 1.15, 1.3)
 render('boton-blanco-1', blanca, 0.12, False, 25, 80, 1.3, 1.3)
 render('boton-blanco-2', blanca, 0.3, False, 45, 200, 1.3, 1.3)

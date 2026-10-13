@@ -1,5 +1,5 @@
 // Escena 3D que acompaña todo el scroll (basada en la rosa de la XV Azul).
-//  - Portada: la rosa roja se abre pétalo por pétalo con el scroll (morph "Abierta").
+//  - Portada: la rosa azul se abre pétalo por pétalo con el scroll (morph "Abierta").
 //  - Después viaja entre secciones según su data-lado, y CAMBIA de objeto según su data-3d:
 //      rosa, anillos, corazon, reloj, pin, campanas, copa, banquete, monio, regalo,
 //      clima, camara, instagram, sobre (ver js/modelos3d.js).
@@ -22,6 +22,7 @@ const escritorio = matchMedia('(min-width: 900px)');
 const capa = document.getElementById('escena-3d');
 const portada = document.getElementById('portada');
 const slotCierre = document.querySelector('[data-rosa-slot="cierre"]');
+const slotFinal = document.querySelector('[data-rosa-slot="final"]');
 const secciones = [...document.querySelectorAll('[data-lado]')];
 const ESCALA_OBJETO = 0.85; // los objetos miden más que la cabeza de la rosa
 
@@ -45,7 +46,7 @@ function pose(el) {
       // celular: secciones de texto → el objeto se asoma por su lado y el texto se recorre al otro (CSS).
       // Secciones a todo lo ancho (fotos, fecha, galería, álbum) → solo se asoma por la orilla.
       return el.hasAttribute('data-ancho')
-        ? { x: 0.86 * lado, y: 0.3, s: 0.5, a: 1, o: 1, m }
+        ? { x: 0.78 * lado, y: 0.3, s: 0.52, a: 1, o: 1, m }
         : { x: 0.7 * lado, y: 0.04, s: 0.56, a: 1, o: 1, m };
     }
     case 'cierre': {
@@ -53,7 +54,12 @@ function pose(el) {
       const y = clamp(1 - (r.top + r.height * 0.4) / (innerHeight / 2), -0.8, 0.8);
       return { x: 0, y, s: pc ? 0.42 : 0.5, a: 0.06, o: 1, m: 'rosa' };
     }
-    case 'final': return { x: 0, y: 0.38, s: pc ? 0.38 : 0.45, a: 0.45, o: pc ? 0.9 : 0.6, m: 'rosa' };
+    case 'final': {
+      // se posa abierta en su hueco, entre la foto y los textos de la despedida
+      const r = slotFinal.getBoundingClientRect();
+      const y = clamp(1 - (r.top + r.height * 0.36) / (innerHeight / 2), -0.85, 0.85); // la flor arriba, el tallo hacia los textos
+      return { x: 0, y, s: pc ? 0.36 : 0.42, a: 0.85, o: 1, m: 'rosa' };
+    }
     default: return { x: 0, y: 0.04, s: 1, a: 1, o: 1, m: 'rosa' }; // fin de la portada
   }
 }
@@ -85,16 +91,16 @@ async function iniciar() {
 
   const camera = new THREE.PerspectiveCamera(32, 1, 0.05, 50);
 
-  // ----- rosa roja (modelo glTF con morph "Abierta")
+  // ----- rosa azul (modelo glTF con morph "Abierta")
   const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
   const gltf = await loader.loadAsync(new URL('../models/rosa.glb', import.meta.url).href);
   const rosa = new THREE.Group();
   rosa.add(gltf.scene);
 
   const matPetalo = new THREE.MeshPhysicalMaterial({
-    vertexColors: true, color: '#b0001e', roughness: 0.42, metalness: 0,
+    vertexColors: true, color: '#2f5aa8', roughness: 0.4, metalness: 0,
     clearcoat: 0.5, clearcoatRoughness: 0.3,
-    sheen: 0.6, sheenColor: new THREE.Color('#e01535'), sheenRoughness: 0.5,
+    sheen: 0.8, sheenColor: new THREE.Color('#8fb0ff'), sheenRoughness: 0.45,
     side: THREE.DoubleSide,
   });
   const matTallo = new THREE.MeshStandardMaterial({ color: '#1f4a2c', metalness: 0.1, roughness: 0.5, side: THREE.DoubleSide });

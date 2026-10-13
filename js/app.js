@@ -35,7 +35,9 @@
     else audio.play().catch(() => btnMusica.classList.add('pausada'));
     mostrarControles();
     requestAnimationFrame(() => btnCompartir.classList.add('entra'));
-    setTimeout(() => { sobre.remove(); recorrido(); }, 2400);
+    // con el sobre cerrado la página medía una pantalla: las animaciones recalculan sus posiciones
+    requestAnimationFrame(() => window.refrescarAnimaciones?.());
+    setTimeout(() => { sobre.remove(); window.refrescarAnimaciones?.(); recorrido(); }, 2400);
   }
   // el sello es el botón accesible; tocar cualquier parte del sobre también abre
   sobre.addEventListener('click', abrirSobre);
@@ -50,6 +52,7 @@
     mostrarControles();
     btnMusica.classList.add('pausada');
     btnCompartir.classList.add('entra');
+    window.refrescarAnimaciones?.();
     $('#album').scrollIntoView({ behavior: 'instant', block: 'start' });
   }
   if (window.__volvioDeCamara) {
@@ -91,16 +94,18 @@
   addEventListener('resize', progreso);
   progreso();
 
-  // ---------- Navegación rápida ----------
-  const navBoton = $('#nav-boton');
-  const cerrarNav = () => { nav.classList.remove('abierta'); navBoton.setAttribute('aria-expanded', 'false'); };
-  navBoton.addEventListener('click', () => {
-    const abrir = !nav.classList.contains('abierta');
-    nav.classList.toggle('abierta', abrir);
-    navBoton.setAttribute('aria-expanded', String(abrir));
-  });
-  $$('#nav-lista a').forEach((a) => a.addEventListener('click', cerrarNav));
-  document.addEventListener('click', (e) => { if (!nav.contains(e.target)) cerrarNav(); });
+  // ---------- Barra de navegación (demo): resalta la sección que se está viendo ----------
+  const enlacesNav = $$('#navegacion a');
+  const destinos = enlacesNav.map((a) => $(a.getAttribute('href')));
+  let pendienteNav = false;
+  function marcarNav() {
+    pendienteNav = false;
+    let activo = 0;
+    destinos.forEach((d, i) => { if (d && d.getBoundingClientRect().top <= innerHeight * 0.45) activo = i; });
+    enlacesNav.forEach((a, i) => a.classList.toggle('activo', i === activo));
+  }
+  addEventListener('scroll', () => { if (!pendienteNav) { pendienteNav = true; requestAnimationFrame(marcarNav); } }, { passive: true });
+  marcarNav();
 
   // ---------- Aparición ----------
   const obs = new IntersectionObserver((entradas) => {
@@ -115,15 +120,13 @@
   // ---------- Cuenta regresiva (al llegar a cero: celebración) ----------
   const objetivo = new Date(cfg.fechaEvento).getTime();
   const fin = new Date(cfg.finEvento).getTime();
-  const celdas = Object.fromEntries($$('#cuenta [data-c]').map((el) => [el.dataset.c, el]));
+  const celdas = $$('[data-c]'); // portada y sección de fecha
   const dos = (n) => String(n).padStart(2, '0');
   let celebrado = false;
   function tic() {
     const d = Math.max(0, objetivo - Date.now());
-    celdas.dias.textContent = dos(Math.floor(d / 864e5));
-    celdas.horas.textContent = dos(Math.floor(d / 36e5) % 24);
-    celdas.minutos.textContent = dos(Math.floor(d / 6e4) % 60);
-    celdas.segundos.textContent = dos(Math.floor(d / 1e3) % 60);
+    const v = { dias: Math.floor(d / 864e5), horas: Math.floor(d / 36e5) % 24, minutos: Math.floor(d / 6e4) % 60, segundos: Math.floor(d / 1e3) % 60 };
+    celdas.forEach((el) => { el.textContent = dos(v[el.dataset.c]); });
     if (d === 0 && Date.now() < fin && !celebrado) celebrar();
   }
   function celebrar() {
@@ -148,15 +151,15 @@
   const inicio = fechaCal(objetivo), termino = fechaCal(fin);
   $('#cal-google').href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titulo)}&dates=${inicio}/${termino}&details=${encodeURIComponent(detalles)}&location=${encodeURIComponent(cfg.lugar)}`;
   $('#cal-outlook').href = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(titulo)}&startdt=${new Date(objetivo).toISOString()}&enddt=${new Date(fin).toISOString()}&body=${encodeURIComponent(detalles)}&location=${encodeURIComponent(cfg.lugar)}`;
-  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//INIT IDEA//Invitacion//ES', 'BEGIN:VEVENT',
-    `UID:boda-abigail-jasiel-20261213@initidea`, `DTSTAMP:${fechaCal(Date.now())}`, `DTSTART:${inicio}`, `DTEND:${termino}`,
-    `SUMMARY:${titulo}`, `LOCATION:${cfg.lugar}`, `DESCRIPTION:${detalles.replace(/\n/g, '\\n')}`,
-    'BEGIN:VALARM', 'TRIGGER:-P1D', 'ACTION:DISPLAY', `DESCRIPTION:${titulo}`, 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
-  $('#cal-ics').href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
-  const btnAgendar = $('#agendar-btn'), opciones = $('#agendar-opciones');
-  btnAgendar.addEventListener('click', () => {
+  // Botón principal: en iPhone/iPad/Mac abre el archivo .ics (Calendario lo agrega); en Android abre
+  // Google Calendar; en computadora descarga el .ics. 'Otras opciones' muestra todas.
+  const btnAgendar = $('#agendar-btn'), opciones = $('#agendar-opciones'), btnMas = $('#agendar-mas');
+  const android = /Android/i.test(navigator.userAgent);
+  if (android) { btnAgendar.href = $('#cal-google').href; btnAgendar.removeAttribute('download'); btnAgendar.target = '_blank'; }
+  else if (/iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent)) btnAgendar.removeAttribute('download'); // Safari lo abre directo en Calendario
+  btnMas.addEventListener('click', () => {
     opciones.hidden = !opciones.hidden;
-    btnAgendar.setAttribute('aria-expanded', String(!opciones.hidden));
+    btnMas.setAttribute('aria-expanded', String(!opciones.hidden));
   });
 
   // ---------- Ubicación, clima y regalos (se activan al llenar js/config.js) ----------
@@ -319,7 +322,7 @@
       popoverClass: 'recorrido',
       steps: [
         { popover: { title: '¡Bienvenido!', description: 'Esta invitación es interactiva. Te mostramos en un momento lo que puedes hacer.' } },
-        { element: '#nav-boton', popover: { title: 'Secciones', description: 'Toca aquí para saltar a la ubicación, el menú, los regalos o la confirmación.' } },
+        { element: '#navegacion', popover: { title: 'Navegación', description: 'Toca un ícono para saltar a la fecha, la ubicación, el menú, los regalos, el álbum o la confirmación.' } },
         { element: '#musica', popover: { title: 'Música', description: 'Pausa o reanuda la canción cuando quieras.' } },
         { element: '#compartir', popover: { title: 'Compartir', description: 'Envía esta invitación por WhatsApp u otras apps.' } },
         { popover: { title: 'Desliza hacia abajo', description: 'Encontrarás la cuenta regresiva, el minuto a minuto, el álbum para subir tus fotos el día de la boda y el botón para confirmar tu asistencia.' } },

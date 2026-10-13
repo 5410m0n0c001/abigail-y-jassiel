@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//INIT IDEA//Invitacion//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:boda-abigail-jasiel-20261213@initidea
+DTSTAMP:20261013T120000Z
+DTSTART:20261213T220000Z
+DTEND:20261214T040000Z
+SUMMARY:Boda de Abigail & Jasiel
+LOCATION:Jardín Mina Real
+DESCRIPTION:Ceremonia religiosa a las 4:00 p. m. y recepción en el mismo jardín.
+Invitación: https://5410m0n0c001.github.io/abigail-y-jassiel/
+URL:https://5410m0n0c001.github.io/abigail-y-jassiel/
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Mañana es la boda de Abigail & Jasiel
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -93,6 +93,10 @@
       <symbol id="i-copiar" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></symbol>
       <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
       <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol>
+      <symbol id="i-casa" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 9.5V20h14V9.5"/><path d="M12 17.5s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/></symbol>
+      <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l4.5 4.5L20 6"/></symbol>
+      <symbol id="i-cubo" viewBox="0 0 24 24"><path d="M12 2.5l8.5 4.8v9.4L12 21.5l-8.5-4.8V7.3zM12 12l8.5-4.7M12 12v9.5M12 12L3.5 7.3"/></symbol>
       <symbol id="i-flor" viewBox="0 0 24 24"><circle cx="12" cy="9" r="2"/><path d="M12 7c-1-3 2-4 2-1M14 9c3-1 4 2 1 2M12 11c1 3-2 4-2 1M10 9c-3 1-4-2-1-2M12 11v10M12 17c-2-2-5-2-6-1 2 2 4 2 6 1z"/></symbol>
     </defs>
   </svg>
@@ -123,35 +127,39 @@
     <button class="boton" type="button" id="llegada-ver">Ver invitación</button>
   </div>
 
-  <!-- Navegación rápida (demo) -->
-  <nav class="navegacion" id="navegacion" aria-label="Secciones" hidden>
-    <button class="nav-boton" id="nav-boton" type="button" aria-expanded="false" aria-controls="nav-lista"><svg><use href="#i-menu"/></svg><span class="oculto">Secciones</span></button>
-    <ul class="nav-lista" id="nav-lista">
-      <li><a href="#fecha">Fecha</a></li>
-      <li><a href="#lugares">Ubicación</a></li>
-      <li><a href="#programa">Programa</a></li>
-      <li><a href="#menu">Menú</a></li>
-      <li><a href="#vestimenta">Vestimenta</a></li>
-      <li><a href="#regalos">Regalos</a></li>
-      <li><a href="#hospedaje">Hospedaje</a></li>
-      <li><a href="#album">Álbum</a></li>
-      <li><a href="#confirmar">Confirmar</a></li>
+  <!-- Barra de navegación flotante (demo): la sección visible se resalta -->
+  <nav class="barra-nav" id="navegacion" aria-label="Secciones" hidden>
+    <ul>
+      <li><a href="#portada" aria-label="Inicio"><svg><use href="#i-casa"/></svg></a></li>
+      <li><a href="#fecha" aria-label="Fecha"><svg><use href="#i-calendario"/></svg></a></li>
+      <li><a href="#lugares" aria-label="Ubicación"><svg><use href="#i-pin"/></svg></a></li>
+      <li><a href="#programa" aria-label="Minuto a minuto"><svg><use href="#i-reloj"/></svg></a></li>
+      <li><a href="#menu" aria-label="Menú"><svg><use href="#i-plato"/></svg></a></li>
+      <li><a href="#regalos" aria-label="Regalos"><svg><use href="#i-regalo"/></svg></a></li>
+      <li><a href="#album" aria-label="Álbum"><svg><use href="#i-camara"/></svg></a></li>
+      <li><a href="#confirmar" aria-label="Confirmar asistencia"><svg><use href="#i-check"/></svg></a></li>
     </ul>
   </nav>
 
   <main>
-    <!-- PORTADA: foto (luego video) + la rosa roja se abre con el scroll -->
+    <!-- PORTADA: foto (luego video) + la rosa azul se abre con el scroll -->
     <section class="portada" id="portada" aria-label="Portada">
       <div class="portada-escena">
         <div class="petalos" id="petalos" aria-hidden="true"></div>
         <p class="portada-sup">Nuestra boda</p>
         <div class="rosa-slot" data-rosa-slot="portada">
-          <img class="rosa-respaldo" src="img/deco/rosa-roja-1.webp" alt="Rosa roja" width="480" height="480">
+          <img class="rosa-respaldo" src="img/deco/rosa-azul-1.webp" alt="Rosa azul" width="480" height="480">
         </div>
         <div class="portada-nombre">
           <h1 class="nombre-script" id="nombres-portada">Abigail <i>&amp;</i> Jasiel</h1>
           <p class="portada-fecha"><span>Domingo</span><b>13</b><span>Diciembre</span></p>
           <p class="portada-anio">2026</p>
+          <div class="portada-cuenta" aria-hidden="true">
+            <div><span data-c="dias">00</span><small>días</small></div>
+            <div><span data-c="horas">00</span><small>hrs</small></div>
+            <div><span data-c="minutos">00</span><small>min</small></div>
+            <div><span data-c="segundos">00</span><small>seg</small></div>
+          </div>
         </div>
       </div>
     </section>
@@ -206,11 +214,12 @@
       </div>
       <p class="cuenta-fin" id="cuenta-fin" hidden>¡Hoy es el gran día!</p>
       <div class="agendar revelar">
-        <button class="boton boton-lleno" type="button" id="agendar-btn" aria-expanded="false" aria-controls="agendar-opciones"><svg><use href="#i-calendario"/></svg>Agendar fecha</button>
+        <a class="boton boton-lleno" id="agendar-btn" href="boda-abigail-jasiel.ics" download><svg><use href="#i-calendario"/></svg>Agendar en mi calendario</a>
+        <button class="enlace" type="button" id="agendar-mas" aria-expanded="false" aria-controls="agendar-opciones">Otras opciones</button>
         <div class="agendar-opciones" id="agendar-opciones" hidden>
           <a id="cal-google" target="_blank" rel="noopener">Google Calendar</a>
+          <a id="cal-apple" href="boda-abigail-jasiel.ics">Apple Calendar (iPhone)</a>
           <a id="cal-outlook" target="_blank" rel="noopener">Outlook</a>
-          <a id="cal-ics" download="boda-abigail-jasiel.ics">Apple / otro calendario</a>
         </div>
       </div>
     </section>
@@ -237,6 +246,7 @@
         <h3>Jardín Mina Real</h3>
         <p class="hoja-detalle">Cóctel de bienvenida y banquete en el mismo jardín</p>
         <p class="hoja-hora">5:00 p. m.</p>
+        <a class="boton boton-blanco" href="mapa.html"><svg><use href="#i-cubo"/></svg>Ubica tu mesa</a>
         <a class="boton" data-mapa href="#" target="_blank" rel="noopener"><svg><use href="#i-pin"/></svg>Cómo llegar</a>
       </article>
     </section>
@@ -518,6 +528,10 @@
     <!-- DESPEDIDA -->
     <section class="despedida" data-lado="final">
       <img class="despedida-foto revelar" src="img/foto-04.jpg" alt="Abigail y Jasiel abrazados" width="1600" height="1066" loading="lazy">
+      <!-- hueco para la rosa: queda entre la foto y los textos -->
+      <div class="rosa-slot rosa-slot-final" data-rosa-slot="final">
+        <img class="rosa-respaldo" src="img/deco/rosa-azul-1.webp" alt="" width="480" height="480" loading="lazy">
+      </div>
       <p class="despedida-texto revelar">¡Te esperamos!</p>
       <p class="nombre-script revelar">Abigail <i>&amp;</i> Jasiel</p>
       <p class="credito">Invitación digital por INIT IDEA</p>
@@ -583,7 +597,7 @@
     <button class="visor-sig" type="button" aria-label="Siguiente">›</button>
   </div>
 
-  <!-- Compartir: al tocarlo el ícono gira y florece una rosa roja -->
+  <!-- Compartir: al tocarlo el ícono gira y florece una rosa azul -->
   <button class="compartir" id="compartir" type="button" hidden>
     <svg viewBox="0 0 48 48" aria-hidden="true">
       <g class="c-share">

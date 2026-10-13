@@ -146,12 +146,17 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
 .portada-fecha span { font: 500 0.75rem var(--f-texto); letter-spacing: 0.3em; text-transform: uppercase; padding: 0.35rem 0; border-block: 1px solid rgba(255, 255, 255, 0.55); min-width: 6.5rem; }
 .portada-fecha b { font: 400 3rem/1 var(--f-display); }
 .portada-anio { font: 500 0.95rem var(--f-texto); letter-spacing: 0.5em; padding-left: 0.5em; margin-top: 0.2rem; }
+/* cuenta regresiva en la portada (hero de Carmesí) */
+.portada-cuenta { display: flex; justify-content: center; gap: 0.45rem; margin-top: 0.9rem; }
+.portada-cuenta div { min-width: 3.3rem; padding: 0.45rem 0.3rem 0.35rem; border-radius: 12px; background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.portada-cuenta span { display: block; font: 400 1.5rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.portada-cuenta small { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.85; }
 
-/* pétalos rojos cayendo (petalos.js de Carmesí, en CSS) */
+/* pétalos azules y blancos cayendo (petalos.js de Carmesí, en CSS) */
 .petalos { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .petalos i {
   position: absolute; top: -8%; left: var(--x); width: calc(14px * var(--s)); height: calc(18px * var(--s));
-  border-radius: 80% 0 70% 20%; background: radial-gradient(circle at 30% 30%, #e0435c, #a30d29 70%);
+  border-radius: 80% 0 70% 20%; background: var(--color-petalo, radial-gradient(circle at 30% 30%, #6f93dc, #1d3a7c 70%));
   opacity: 0.85; animation: caer var(--d) linear var(--t) infinite;
 }
 @keyframes caer {
@@ -163,7 +168,7 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
 /* ============ Tipografía compartida ============ */
 .nombre-script { font-family: var(--f-script); font-weight: 400; color: var(--marino); }
 .titulo { font: 400 clamp(2.1rem, 8.5vw, 2.9rem)/1.1 var(--f-display); color: var(--marino); margin-bottom: 1.4rem; }
-.bloque { max-width: var(--ancho); margin: 0 auto; padding: clamp(3.6rem, 13vw, 6rem) var(--lado); }
+.bloque { position: relative; max-width: var(--ancho); margin: 0 auto; padding: clamp(3.6rem, 13vw, 6rem) var(--lado); }
 .nota { margin-top: 1.2rem; font-size: 0.95rem; color: var(--tinta-suave); }
 
 /* ============ Nuestra boda ============ */
@@ -180,7 +185,18 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
 /* ============ Cadena de rosas 3D ============ */
 .cadena { position: relative; height: clamp(4.5rem, 18vw, 7rem); overflow: hidden; margin: 0.5rem 0; pointer-events: none; }
 .cadena-tira { display: flex; align-items: center; width: max-content; height: 100%; }
-.cadena-tira img { width: clamp(4.5rem, 18vw, 7rem); height: auto; margin-right: -1.4rem; transform: rotate(var(--r)); filter: drop-shadow(0 6px 8px rgba(20, 42, 92, 0.18)); }
+.flor { flex: none; width: calc(clamp(4.5rem, 18vw, 7rem) * var(--tam, 1)); margin-right: -1.6rem; translate: 0 var(--dy, 0); }
+.flor img { width: 100%; height: auto; transform-origin: 50% 70%; filter: drop-shadow(0 8px 10px rgba(20, 42, 92, 0.22)); }
+/* cada flor se mece sola, con su propio ritmo (no se ven como recortes pegados) */
+.flor img { animation: mecer var(--dur, 4s) ease-in-out var(--ret, 0s) infinite alternate; }
+@keyframes mecer {
+  from { transform: rotate(calc(var(--r) - 9deg)) translateY(-3%) scale(0.97); }
+  to { transform: rotate(calc(var(--r) + 9deg)) translateY(3%) scale(1.03); }
+}
+/* rosas grandes que entran girando por los costados (decoraciones de Carmesí) */
+.flor-lado { position: absolute; top: -2.5rem; width: clamp(7rem, 30vw, 13rem); height: auto; z-index: -1; pointer-events: none; opacity: 0.9; filter: drop-shadow(0 12px 16px rgba(20, 42, 92, 0.2)); }
+.flor-izq { left: -3.5rem; }
+.flor-der { right: -3.5rem; }
 
 /* ============ Fotos que entran deslizándose (Carmesí) ============ */
 .foto-slide { max-width: 40rem; margin: 1rem auto; padding: 0 var(--lado); position: relative; }
@@ -249,6 +265,8 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
 .hoja .pendiente { color: rgba(255, 255, 255, 0.7) !important; }
 .hoja .boton { border-color: #fff; color: #fff; margin-top: 0.8rem; }
 .hoja .boton:hover { background: rgba(255, 255, 255, 0.12); }
+.hoja .boton-blanco { background: #fff; color: var(--marino); margin-right: 0.4rem; }
+.hoja .boton-blanco:hover { background: var(--cielo); }
 
 /* ============ Programa ============ */
 .programa .titulo { text-align: center; }
@@ -347,7 +365,7 @@ textarea::placeholder, input::placeholder { color: #9aa3b8; }
 textarea:focus, input:focus { outline: none; border-color: var(--azul); }
 
 /* ============ Confirmación ============ */
-.confirmar { max-width: var(--ancho); margin: 0 auto; padding: 2rem var(--lado) 4rem; text-align: center; }
+.confirmar { position: relative; max-width: var(--ancho); margin: 0 auto; padding: 2rem var(--lado) 4rem; text-align: center; }
 .rosa-slot-cierre { height: clamp(15rem, 62vw, 21rem); width: 100%; margin-bottom: -2rem; }
 .confirmar-panel { position: relative; padding: 2.4rem 1.5rem 2rem; border-radius: 26px; background: #fff; box-shadow: 0 20px 50px rgba(20, 42, 92, 0.16); text-align: left; }
 .confirmar-panel .titulo { text-align: center; }
@@ -364,8 +382,9 @@ legend { margin-bottom: 0.6rem; }
 .rsvp-max { font-size: 0.88rem; color: var(--tinta-suave); }
 
 /* ============ Despedida ============ */
-.despedida { text-align: center; padding: 3rem var(--lado) calc(9.5rem + env(safe-area-inset-bottom)); max-width: 40rem; margin: 0 auto; }
-.despedida-foto { width: 100%; border: 8px solid #fff; border-radius: 4px; box-shadow: var(--sombra); margin-bottom: 2rem; transform: rotate(-2deg); }
+.despedida { text-align: center; padding: 3rem var(--lado) calc(13rem + env(safe-area-inset-bottom)); max-width: 40rem; margin: 0 auto; }
+.despedida-foto { width: 100%; border: 8px solid #fff; border-radius: 4px; box-shadow: var(--sombra); transform: rotate(-2deg); }
+.rosa-slot-final { height: clamp(17rem, 78vw, 24rem); width: 100%; margin: 0.5rem 0; }
 .despedida-texto { font: italic 400 1.6rem var(--f-texto); color: var(--tinta-suave); }
 .despedida .nombre-script { font-size: clamp(4rem, 19vw, 6.5rem); line-height: 1.05; }
 .despedida .nombre-script i { font-style: normal; font-size: 0.6em; }
@@ -389,7 +408,7 @@ legend { margin-bottom: 0.6rem; }
 .ruleta .sector-b { fill: var(--azul); stroke: rgba(255, 255, 255, 0.6); stroke-width: 0.6; }
 .ruleta text { fill: #fff; stroke: none; font: 600 7.5px var(--f-texto); letter-spacing: 0.06em; text-transform: uppercase; }
 .ruleta-aro { fill: none; stroke: #fff; stroke-width: 2.4; }
-.ruleta-aguja { position: absolute; left: 50%; top: -0.6rem; translate: -50% 0; width: 0; height: 0; border-left: 0.75rem solid transparent; border-right: 0.75rem solid transparent; border-top: 1.4rem solid var(--rojo); filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3)); }
+.ruleta-aguja { position: absolute; left: 50%; top: -0.6rem; translate: -50% 0; width: 0; height: 0; border-left: 0.75rem solid transparent; border-right: 0.75rem solid transparent; border-top: 1.4rem solid var(--azul); filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3)); }
 .ruleta-centro { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 26%; aspect-ratio: 1; border-radius: 50%; border: 2px solid #fff; background: radial-gradient(circle at 35% 30%, #ffffff, #e6eef9 60%, #c9d6ee); color: var(--marino); font: 700 0.76rem var(--f-texto); letter-spacing: 0.1em; text-transform: uppercase; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25); }
 .ruleta-centro:disabled { opacity: 0.85; }
 .reto-carta { margin-top: 1.4rem; padding: 1.3rem 1.2rem; border-radius: 20px; background: #fff; box-shadow: var(--sombra); display: grid; gap: 0.8rem; justify-items: center; animation: reto-entra 0.5s cubic-bezier(.2,1.2,.4,1); }
@@ -439,7 +458,7 @@ legend { margin-bottom: 0.6rem; }
 .org-check input { width: 1.1rem; height: 1.1rem; accent-color: var(--marino); }
 .org-cerrar { position: absolute; top: 0.6rem; right: 0.6rem; width: 2.4rem; height: 2.4rem; border: 0; border-radius: 50%; background: var(--cielo); color: var(--marino); font-size: 1.5rem; line-height: 1; }
 .org-secundario { justify-self: center; margin-top: 0.2rem; }
-body.organizador-activo .compartir { border-color: var(--rojo); box-shadow: 0 0 0 2px rgba(181, 18, 47, 0.25); }
+body.organizador-activo .compartir { border-color: var(--azul); box-shadow: 0 0 0 2px rgba(47, 90, 168, 0.3); }
 
 /* ============ Visor ============ */
 .visor { position: fixed; inset: 0; z-index: 90; background: rgba(8, 16, 38, 0.94); display: grid; place-items: center; padding: 3.5rem 0.5rem; }
@@ -449,17 +468,24 @@ body.organizador-activo .compartir { border-color: var(--rojo); box-shadow: 0 0 
 .visor-prev { left: 0.6rem; top: 50%; translate: 0 -50%; }
 .visor-sig { right: 0.6rem; top: 50%; translate: 0 -50%; }
 
-/* ============ Navegación rápida ============ */
-.navegacion { position: fixed; top: calc(env(safe-area-inset-top) + 0.8rem); left: 0.8rem; z-index: 85; }
-.nav-boton { width: 3rem; height: 3rem; border-radius: 50%; border: 1px solid var(--linea); background: rgba(255, 255, 255, 0.88); color: var(--marino); display: grid; place-items: center; box-shadow: var(--sombra); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
-.nav-lista { list-style: none; margin: 0.5rem 0 0; padding: 0.5rem; border-radius: 18px; background: #fff; box-shadow: var(--sombra); display: grid; min-width: 11rem; opacity: 0; transform: translateY(-8px) scale(0.96); transform-origin: top left; pointer-events: none; transition: opacity 0.25s, transform 0.25s; }
-.navegacion.abierta .nav-lista { opacity: 1; transform: none; pointer-events: auto; }
-.nav-lista a { display: block; padding: 0.55rem 0.9rem; border-radius: 10px; text-decoration: none; color: var(--marino); font-weight: 500; }
-.nav-lista a:hover { background: var(--cielo); }
+/* ============ Barra de navegación flotante (demo) ============ */
+.barra-nav {
+  position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 0.8rem); translate: -50% 0; z-index: 85;
+  max-width: calc(100vw - 1.2rem); padding: 0.3rem 0.4rem; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95); border: 1px solid var(--linea); box-shadow: 0 10px 34px rgba(20, 42, 92, 0.22);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  animation: barra-entra 0.8s cubic-bezier(.2,1.2,.4,1) both;
+}
+.barra-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 0.15rem; }
+.barra-nav a { display: grid; place-items: center; width: 2.45rem; height: 2.45rem; border-radius: 50%; color: var(--tinta-suave); transition: background-color 0.3s, color 0.3s, transform 0.2s; }
+.barra-nav a svg { width: 1.3rem; height: 1.3rem; }
+.barra-nav a.activo, .barra-nav a:hover { background: var(--marino); color: #fff; box-shadow: 0 4px 10px rgba(20, 42, 92, 0.3); }
+.barra-nav a:active { transform: scale(0.92); }
+@keyframes barra-entra { from { translate: -50% 140%; opacity: 0; } }
 
-/* ============ Compartir: al tocar gira y florece una rosa roja ============ */
+/* ============ Compartir: al tocar gira y florece una rosa azul ============ */
 .compartir {
-  position: fixed; right: 1rem; bottom: calc(env(safe-area-inset-bottom) + 4.6rem); z-index: 80;
+  position: fixed; right: 1rem; bottom: calc(env(safe-area-inset-bottom) + 8.2rem); z-index: 80;
   height: 3rem; padding: 0 1.05rem 0 0.5rem; border-radius: 999px;
   border: 1px solid var(--linea); background: rgba(255, 255, 255, 0.9); color: var(--marino);
   display: flex; align-items: center; gap: 0.45rem; box-shadow: var(--sombra);
@@ -470,8 +496,8 @@ body.organizador-activo .compartir { border-color: var(--rojo); box-shadow: 0 0 
 .compartir svg * { transform-box: view-box; transform-origin: 24px 24px; }
 .c-share { stroke: var(--marino); stroke-width: 2; fill: none; }
 .c-share circle { fill: #fff; }
-.c-petalo { fill: #c8102e; stroke: #fff; stroke-width: 0.7; transform: rotate(var(--r)) scale(0); }
-.c-interno { fill: #8f0b22; }
+.c-petalo { fill: #2f5aa8; stroke: #fff; stroke-width: 0.7; transform: rotate(var(--r)) scale(0); }
+.c-interno { fill: #142a5c; }
 .c-centro { fill: none; stroke: #fff; stroke-width: 1.3; opacity: 0; }
 .c-hoja { fill: #2f6b3e; stroke: #fff; stroke-width: 0.8; transform: scale(0); }
 .compartir.entra { animation: c-aparece 0.6s cubic-bezier(.2,1.4,.4,1) both; }
@@ -492,10 +518,10 @@ body.organizador-activo .compartir { border-color: var(--rojo); box-shadow: 0 0 
 @keyframes c-brillo { 40% { transform: rotate(-14deg) scale(1.12); } }
 
 /* ============ Música y aviso ============ */
-.musica { position: fixed; right: 1rem; bottom: calc(env(safe-area-inset-bottom) + 1rem); z-index: 80; width: 3rem; height: 3rem; border-radius: 50%; border: 1px solid var(--linea); background: rgba(255, 255, 255, 0.9); color: var(--marino); display: grid; place-items: center; box-shadow: var(--sombra); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.musica { position: fixed; right: 1rem; bottom: calc(env(safe-area-inset-bottom) + 4.6rem); z-index: 80; width: 3rem; height: 3rem; border-radius: 50%; border: 1px solid var(--linea); background: rgba(255, 255, 255, 0.9); color: var(--marino); display: grid; place-items: center; box-shadow: var(--sombra); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 .musica .ico-off, .musica.pausada .ico-on { display: none; }
 .musica.pausada .ico-off { display: block; }
-.aviso { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 8.4rem); translate: -50% 1rem; z-index: 95; max-width: calc(100vw - 2rem); padding: 0.7rem 1.2rem; border-radius: 999px; background: var(--marino); color: #fff; font-size: 0.95rem; text-align: center; opacity: 0; pointer-events: none; transition: opacity 0.3s, translate 0.3s; }
+.aviso { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 12rem); translate: -50% 1rem; z-index: 95; max-width: calc(100vw - 2rem); padding: 0.7rem 1.2rem; border-radius: 999px; background: var(--marino); color: #fff; font-size: 0.95rem; text-align: center; opacity: 0; pointer-events: none; transition: opacity 0.3s, translate 0.3s; }
 .aviso.visible { opacity: 1; translate: -50% 0; }
 
 /* ============ Recorrido guiado (driver.js) ============ */
@@ -518,6 +544,7 @@ body.organizador-activo .compartir { border-color: var(--rojo); box-shadow: 0 0 
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .flor img { animation: none; }
   .revelar { opacity: 1; transform: none; transition: none; }
   .sello { animation: none; }
   .portada { height: 100svh; }
@@ -527,11 +554,14 @@ body.organizador-activo .compartir { border-color: var(--rojo); box-shadow: 0 0 
 
 /* Celular: el texto deja libre el lado por donde se asoma el objeto 3D */
 @media (max-width: 899px) {
-  .portada-escena { padding-bottom: calc(env(safe-area-inset-bottom) + 8.2rem); } /* libre de los botones fijos */
+  .portada-escena { padding-bottom: calc(env(safe-area-inset-bottom) + 4.6rem); } /* libre de la barra inferior */
   [data-lado="izq"]:not([data-ancho]) { padding-left: calc(var(--lado) + 24vw); }
   [data-lado="der"]:not([data-ancho]) { padding-right: calc(var(--lado) + 24vw); }
   [data-lado]:not([data-ancho]) .titulo { font-size: clamp(1.8rem, 7.6vw, 2.3rem); }
   [data-lado]:not([data-ancho]) .hoja { padding-inline: 1.1rem; }
+  /* en celular Compartir queda como ícono redondo para no tapar la cuenta de la portada */
+  .compartir { width: 3rem; padding: 0; justify-content: center; }
+  .compartir span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
 
 @media (min-width: 900px) {

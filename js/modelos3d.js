@@ -11,8 +11,9 @@ const M = {
   marino: new THREE.MeshPhysicalMaterial({ color: '#1d3473', roughness: 0.38, clearcoat: 0.7, clearcoatRoughness: 0.25, sheen: 0.6, sheenColor: new THREE.Color('#6d8ee0') }),
   azul: new THREE.MeshPhysicalMaterial({ color: '#4a74c9', roughness: 0.12, clearcoat: 1, transparent: true, opacity: 0.88 }),
   blanco: new THREE.MeshPhysicalMaterial({ color: '#fbf9f4', roughness: 0.45, clearcoat: 0.3, sheen: 0.5, sheenColor: new THREE.Color('#ffffff') }),
-  rojo: new THREE.MeshPhysicalMaterial({ color: '#b5122f', roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.1 }),
-  cera: new THREE.MeshPhysicalMaterial({ color: '#9e0f27', roughness: 0.42, clearcoat: 0.6 }),
+  corazon: new THREE.MeshPhysicalMaterial({ color: '#2f5aa8', roughness: 0.25, clearcoat: 1, clearcoatRoughness: 0.08, sheen: 0.5, sheenColor: new THREE.Color('#9fbcff') }),
+  porcelana: new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.05 }),
+  cera: new THREE.MeshPhysicalMaterial({ color: '#1d3a7c', roughness: 0.42, clearcoat: 0.6 }),
   vidrio: new THREE.MeshPhysicalMaterial({ color: '#eef4ff', roughness: 0.04, clearcoat: 1, transparent: true, opacity: 0.32, side: THREE.DoubleSide, depthWrite: false }),
   diamante: new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0, clearcoat: 1, metalness: 0.15, envMapIntensity: 3, flatShading: true }),
   oscuro: new THREE.MeshPhysicalMaterial({ color: '#0d1733', roughness: 0.08, clearcoat: 1 }),
@@ -50,20 +51,64 @@ function corazon() {
   geo.center();
   geo.rotateZ(Math.PI); // la forma viene con el eje Y hacia abajo; girar (no reflejar) conserva las caras
   geo.scale(0.0125, 0.0125, 0.0125);
-  return grupo(malla(geo, M.rojo));
+  return grupo(malla(geo, M.corazon));
+}
+
+function texturaMapa() {
+  // plano de calles: manzanas, avenidas, un parque y un río (lo que hace leer "ubicación" y no "globo")
+  const c = document.createElement('canvas');
+  c.width = 768; c.height = 512;
+  const x = c.getContext('2d');
+  x.fillStyle = '#f3efe4'; x.fillRect(0, 0, 768, 512);
+  x.fillStyle = '#e2dccb';
+  for (let i = 0; i < 9; i++) for (let j = 0; j < 6; j++) x.fillRect(i * 88 + 14, j * 88 + 12, 66, 66); // manzanas
+  x.fillStyle = '#bfe0b0'; x.fillRect(278, 188, 154, 154); // parque (el jardín)
+  x.strokeStyle = '#9fc3ef'; x.lineWidth = 26; x.beginPath(); x.moveTo(0, 470); x.bezierCurveTo(250, 380, 450, 520, 768, 400); x.stroke(); // río
+  x.strokeStyle = '#ffffff'; x.lineWidth = 16;
+  x.beginPath(); x.moveTo(0, 96); x.lineTo(768, 150); x.moveTo(520, 0); x.lineTo(470, 512); x.stroke(); // avenidas
+  x.strokeStyle = '#f2c46d'; x.lineWidth = 6;
+  x.beginPath(); x.moveTo(0, 96); x.lineTo(768, 150); x.moveTo(520, 0); x.lineTo(470, 512); x.stroke();
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  return t;
 }
 
 function pin() {
-  const cabeza = malla(new THREE.SphereGeometry(0.42, 48, 32), M.marino, 0, 0.3, 0);
-  const punta = malla(new THREE.ConeGeometry(0.37, 0.78, 48, 1, true), M.marino, 0, -0.27, 0);
+  // alfiler azul marino clavado en un mapa doblado en acordeón (3 paneles)
+  const cabeza = malla(new THREE.SphereGeometry(0.3, 48, 32), M.marino, 0, 0.62, 0);
+  const punta = malla(new THREE.ConeGeometry(0.265, 0.56, 48, 1, true), M.marino, 0, 0.23, 0);
   punta.rotation.x = Math.PI;
-  const punto = malla(new THREE.CylinderGeometry(0.16, 0.16, 0.06, 40), M.blanco, 0, 0.32, 0.4);
+  const punto = malla(new THREE.CylinderGeometry(0.11, 0.11, 0.05, 40), M.blanco, 0, 0.64, 0.28);
   punto.rotation.x = Math.PI / 2;
-  const sombra = malla(new THREE.TorusGeometry(0.16, 0.025, 12, 48), M.marino, 0, -0.72, 0);
-  sombra.rotation.x = Math.PI / 2;
-  const g = grupo(cabeza, punta, punto, sombra);
-  g.userData.oscila = true;
-  return g;
+  const sombra = malla(new THREE.CircleGeometry(0.12, 32), new THREE.MeshBasicMaterial({ color: '#0c1b40', transparent: true, opacity: 0.25, depthWrite: false }), 0, -0.035, 0.02);
+  sombra.rotation.x = -Math.PI / 2;
+
+  const tex = texturaMapa();
+  const papel = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85, side: THREE.DoubleSide });
+  const mapa = new THREE.Group();
+  const ancho = 0.5, fondo = 1.0, doblez = 0.32;
+  for (let i = 0; i < 3; i++) {
+    const geo = new THREE.PlaneGeometry(ancho, fondo);
+    const uv = geo.attributes.uv;
+    for (let k = 0; k < uv.count; k++) uv.setX(k, (i + uv.getX(k)) / 3); // cada panel muestra su tercio del plano
+    const panel = malla(geo, papel);
+    const giro = i === 1 ? -doblez : doblez; // zigzag
+    const pivote = new THREE.Group();
+    pivote.position.set((i - 1) * ancho * Math.cos(doblez), i === 1 ? 0.08 : 0, 0);
+    panel.rotation.set(-Math.PI / 2, giro, 0);
+    pivote.add(panel);
+    mapa.add(pivote);
+  }
+  mapa.position.y = -0.06;
+  mapa.rotation.x = 0.35; // inclinado hacia la cámara para que se lean las calles
+  const alfiler = grupo(cabeza, punta, punto, sombra);
+  alfiler.position.set(0.02, 0.02, 0.05);
+  const g = grupo(mapa, alfiler);
+  g.position.y = -0.15;
+  const todo = grupo(g);
+  todo.userData.oscila = true;
+  return todo;
 }
 
 function reloj() {
@@ -94,22 +139,44 @@ function reloj() {
 }
 
 function campanas() {
-  const perfil = torno([[0, 0.5], [0.08, 0.5], [0.16, 0.42], [0.2, 0.22], [0.25, 0.02], [0.36, -0.16], [0.43, -0.26], [0.41, -0.29], [0.3, -0.2], [0.18, -0.02], [0.14, 0.2], [0.1, 0.4], [0, 0.44]]);
+  // campana clásica de porcelana con filos dorados; el perfil gira alrededor del eje Y
+  const perfil = torno([
+    [0, 0.42], [0.07, 0.42], [0.12, 0.38], [0.15, 0.3], [0.17, 0.16], [0.19, 0.02], [0.23, -0.1],
+    [0.3, -0.2], [0.38, -0.27], [0.43, -0.31], [0.42, -0.33], [0.36, -0.3], [0.27, -0.22],
+    [0.2, -0.1], [0.16, 0.05], [0.14, 0.2], [0.11, 0.33], [0.06, 0.38], [0, 0.38],
+  ], 72);
   const campana = (x, giro) => {
-    const c = grupo(malla(perfil, M.plata), malla(new THREE.SphereGeometry(0.07, 16, 12), M.oro, 0, -0.24, 0));
-    c.position.set(x, -0.1, 0);
+    const labio = malla(new THREE.TorusGeometry(0.425, 0.022, 12, 80), M.oro, 0, -0.32, 0);
+    labio.rotation.x = Math.PI / 2;
+    const banda = malla(new THREE.TorusGeometry(0.178, 0.014, 10, 64), M.oro, 0, 0.12, 0);
+    banda.rotation.x = Math.PI / 2;
+    const c = grupo(
+      malla(perfil, M.porcelana), labio, banda,
+      malla(new THREE.SphereGeometry(0.05, 20, 14), M.oro, 0, 0.44, 0),
+      malla(new THREE.CylinderGeometry(0.012, 0.012, 0.3, 8), M.oro, 0, -0.2, 0),
+      malla(new THREE.SphereGeometry(0.065, 20, 14), M.oro, 0, -0.36, 0), // badajo
+    );
+    c.position.set(x, -0.12, 0);
     c.rotation.z = giro;
     return c;
   };
+  // moño azul marino que une las dos campanas
   const lazo = (lado) => {
-    const l = malla(new THREE.TorusGeometry(0.11, 0.04, 12, 32), M.marino, lado * 0.12, 0.46, 0.05);
-    l.scale.set(1, 0.6, 0.6);
+    const l = malla(new THREE.TorusGeometry(0.13, 0.045, 14, 40), M.marino, lado * 0.15, 0.42, 0.04);
+    l.scale.set(1.15, 0.62, 0.55);
+    l.rotation.z = lado * 0.25;
     return l;
   };
-  const listonI = malla(new THREE.BoxGeometry(0.05, 0.3, 0.02), M.marino, -0.06, 0.28, 0.06);
-  listonI.rotation.z = 0.35;
-  const listonD = listonI.clone(); listonD.position.x = 0.06; listonD.rotation.z = -0.35;
-  return grupo(campana(-0.27, 0.32), campana(0.27, -0.32), lazo(-1), lazo(1), malla(new THREE.SphereGeometry(0.06, 16, 12), M.marino, 0, 0.46, 0.06), listonI, listonD);
+  const cola = (lado) => {
+    const t = malla(new RoundedBoxGeometry(0.07, 0.34, 0.025, 2, 0.01), M.marino, lado * 0.09, 0.24, 0.07);
+    t.rotation.z = lado * 0.45;
+    return t;
+  };
+  const nudo = malla(new THREE.SphereGeometry(0.065, 20, 14), M.marino, 0, 0.42, 0.06);
+  nudo.scale.set(1, 0.85, 0.8);
+  const g = grupo(campana(-0.3, 0.3), campana(0.3, -0.3), lazo(-1), lazo(1), cola(-1), cola(1), nudo);
+  g.userData.oscila = true;
+  return g;
 }
 
 function copa() {
@@ -162,16 +229,16 @@ function regalo() {
   const tapa = malla(new RoundedBoxGeometry(0.98, 0.18, 0.98, 4, 0.04), M.marino, 0, 0.22, 0);
   const g = grupo(caja, tapa);
   for (const [w, d] of [[0.15, 1.0], [1.0, 0.15]]) {
-    g.add(malla(new THREE.BoxGeometry(w, 0.74, d * 0.92), M.rojo, 0, -0.2, 0));
-    g.add(malla(new THREE.BoxGeometry(w * 1.02, 0.2, d), M.rojo, 0, 0.22, 0));
+    g.add(malla(new THREE.BoxGeometry(w, 0.74, d * 0.92), M.oro, 0, -0.2, 0));
+    g.add(malla(new THREE.BoxGeometry(w * 1.02, 0.2, d), M.oro, 0, 0.22, 0));
   }
   for (const lado of [-1, 1]) {
-    const lazo = malla(new THREE.TorusGeometry(0.15, 0.05, 14, 36), M.rojo, lado * 0.15, 0.4, 0);
+    const lazo = malla(new THREE.TorusGeometry(0.15, 0.05, 14, 36), M.oro, lado * 0.15, 0.4, 0);
     lazo.rotation.set(0, 0, lado * 0.5);
     lazo.scale.set(1, 0.7, 0.6);
     g.add(lazo);
   }
-  g.add(malla(new THREE.SphereGeometry(0.07, 16, 12), M.rojo, 0, 0.36, 0));
+  g.add(malla(new THREE.SphereGeometry(0.07, 16, 12), M.oro, 0, 0.36, 0));
   return g;
 }
 
@@ -184,7 +251,7 @@ function camara() {
   cristal.rotation.x = Math.PI / 2;
   const brillo = malla(new THREE.SphereGeometry(0.05, 12, 8), M.blanco, -0.07, 0.06, 0.42);
   const flash = malla(new RoundedBoxGeometry(0.2, 0.1, 0.05, 2, 0.02), M.blanco, 0.38, 0.24, 0.21);
-  const boton = malla(new THREE.CylinderGeometry(0.07, 0.07, 0.07, 24), M.rojo, 0.38, 0.42, 0);
+  const boton = malla(new THREE.CylinderGeometry(0.07, 0.07, 0.07, 24), M.azul, 0.38, 0.42, 0);
   const g = grupo(cuerpo, visor, lente, cristal, brillo, flash, boton);
   g.userData.oscila = true;
   return g;
@@ -204,7 +271,7 @@ function degradadoInstagram() {
 }
 
 function instagram() {
-  const base = malla(new RoundedBoxGeometry(1.2, 1.2, 0.24, 6, 0.3), new THREE.MeshPhysicalMaterial({ map: degradadoInstagram(), roughness: 0.25, clearcoat: 1 }));
+  const base = malla(new RoundedBoxGeometry(1.2, 1.2, 0.24, 6, 0.3), (() => { const t = degradadoInstagram(); return new THREE.MeshPhysicalMaterial({ map: t, emissiveMap: t, emissive: '#ffffff', emissiveIntensity: 0.55, roughness: 0.3, clearcoat: 0.6, clearcoatRoughness: 0.2 }); })() /* brillo propio: colores vivos aunque la luz sea suave */);
   const rect = (s, w, r) => {
     s.moveTo(-w + r, -w); s.lineTo(w - r, -w); s.quadraticCurveTo(w, -w, w, -w + r);
     s.lineTo(w, w - r); s.quadraticCurveTo(w, w, w - r, w); s.lineTo(-w + r, w);

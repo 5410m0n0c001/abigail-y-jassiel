@@ -42,7 +42,7 @@
   const q = new URLSearchParams(location.search);
   const n = +q.get('n') || 0;
   const personas = n ? `<p class="num">${n}</p><p class="personas">${n === 1 ? 'persona' : 'personas'}</p>` : '';
-  const flores = `<img class="rosa r1" src="../img/deco/rosa-roja-1.webp"><img class="rosa r2" src="../img/deco/rosa-roja-2.webp">`;
+  const flores = `<img class="rosa r1" src="../img/deco/rosa-azul-1.webp"><img class="rosa r2" src="../img/deco/rosa-azul-2.webp">`;
   if (q.get('tipo') === 'pase') {
     document.body.innerHTML = `<div class="pase">${flores}<img class="rosa b1" src="../img/deco/boton-blanco-1.webp"><img class="rosa b2" src="../img/deco/boton-blanco-2.webp">
       <p class="sup">Pase de acceso</p><p class="nombres">Abigail &amp; Jasiel</p>${personas}<p class="fecha">13 de diciembre de 2026 · Jardín Mina Real</p></div>`;
