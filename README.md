@@ -58,7 +58,7 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 | Código de vestimenta | `index.html` → sección vestimenta |
 | Mesa de regalos: banco, cuenta, titular y tienda | `index.html` → sección regalos (quitar `aria-disabled` del enlace) |
 | Hospedaje | `index.html` → sección hospedaje |
-| Canción (hoy provisional: "Cinematic Climax & DJ Outro") | `audio/cancion.mp3` |
+| Música: es el sonido del video de la historia | `video/historia.mp4` |
 | Video de portada (sesión del 14 de octubre) | `index.html` → `.portada-foto` (ver comentario) |
 | Hashtag `#AbiYJasiel2026` (validar en Instagram que esté libre) | `index.html` → sección comparte |
 | Clave del panel de organizador | `js/pases.js` → `CLAVE_SHA256` |
