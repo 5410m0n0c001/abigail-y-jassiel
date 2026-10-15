@@ -7,9 +7,8 @@ window.INVITACION = {
   titulo: 'Boda de Abigail & Jasiel',
   lugar: 'Jardín Mina Real',
 
-  // PENDIENTE: WhatsApp que recibe confirmaciones y el buzón de deseos (lada + número, sin espacios).
-  // Mientras esté vacío, los botones avisan que la confirmación se habilitará pronto.
-  whatsapp: '',
+  // WhatsApp que recibe confirmaciones y el buzón de deseos (lada 52 + número, sin espacios)
+  whatsapp: '527772600914',
 
   // PENDIENTE: enlace de Google Maps del jardín (los botones "Cómo llegar" lo usan)
   mapa: '',

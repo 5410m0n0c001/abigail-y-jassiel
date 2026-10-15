@@ -48,7 +48,6 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 
 | Dato | Dónde se cambia |
 |---|---|
-| WhatsApp de confirmaciones | `js/config.js` → `whatsapp` |
 | Enlace de Google Maps del jardín y dirección | `js/config.js` → `mapa`; dirección en `index.html` (`data-dir-jardin`) |
 | Coordenadas para el clima | `js/config.js` → `clima` |
 | Padres y padrinos | `index.html` → sección familia |
