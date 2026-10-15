@@ -33,8 +33,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Updock&display=swap" rel="stylesheet">
   <link rel="preload" href="models/rosa.glb" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
-  <link rel="stylesheet" href="css/boda.css?v=20261014h">
-  <link rel="stylesheet" href="css/tema-noche.css?v=20261014h">
+  <link rel="stylesheet" href="css/boda.css?v=20261014i">
+  <link rel="stylesheet" href="css/tema-noche.css?v=20261014i">
 
   <script type="importmap">
     {
@@ -44,19 +44,19 @@
       }
     }
   </script>
-  <script src="js/config.js?v=20261014h"></script>
+  <script src="js/config.js?v=20261014i"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js"></script>
-  <script defer src="js/app.js?v=20261014h"></script>
-  <script defer src="js/carmesi.js?v=20261014h"></script>
-  <script defer src="js/pases.js?v=20261014h"></script>
-  <script type="module" src="js/escena3d.js?v=20261014h"></script>
+  <script defer src="js/app.js?v=20261014i"></script>
+  <script defer src="js/carmesi.js?v=20261014i"></script>
+  <script defer src="js/pases.js?v=20261014i"></script>
+  <script type="module" src="js/escena3d.js?v=20261014i"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script defer src="js/album.js?v=20261014h"></script>
-  <script defer src="js/retos.js?v=20261014h"></script>
+  <script defer src="js/album.js?v=20261014i"></script>
+  <script defer src="js/retos.js?v=20261014i"></script>
 </head>
 
 <body class="sobre-cerrado">
@@ -587,7 +587,8 @@
     <div class="org-panel" role="dialog" aria-modal="true" aria-labelledby="org-envio-titulo">
       <button class="org-cerrar" type="button" id="org-cerrar" aria-label="Cerrar">×</button>
       <h2 class="org-titulo" id="org-envio-titulo">Enviar invitación</h2>
-      <label for="org-nombre">Nombre del invitado <span>(opcional)</span></label>
+      <p class="org-enviado" id="org-enviado" role="status" hidden></p>
+      <label for="org-nombre">Nombre del invitado</label>
       <input id="org-nombre" type="text" maxlength="60" placeholder="Ej. Familia López" autocomplete="off">
       <p class="org-sub">Toca los pases que vas a enviar</p>
       <div class="org-pases" id="org-pases">
@@ -600,7 +601,8 @@
       <div class="org-elegidos" id="org-elegidos" aria-live="polite"></div>
       <p class="org-total" id="org-total"></p>
       <label class="org-check"><input type="checkbox" id="org-adjuntar" checked> Adjuntar las imágenes de los pases</label>
-      <button class="boton boton-lleno" type="button" id="org-enviar">Compartir</button>
+      <p class="org-falta" id="org-falta" aria-live="polite"></p>
+      <button class="boton boton-lleno" type="button" id="org-enviar" disabled>Compartir</button>
       <button class="enlace org-secundario" type="button" id="org-salir">Salir del panel</button>
     </div>
   </div>

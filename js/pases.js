@@ -112,6 +112,7 @@
   // --- ventana de envío
   const fondoEnvio = $('#org-envio'), inputNombre = $('#org-nombre');
   const elegidos = $('#org-elegidos'), total = $('#org-total'), adjuntar = $('#org-adjuntar');
+  const btnEnviar = $('#org-enviar'), falta = $('#org-falta'), enviado = $('#org-enviado');
   let seleccion = [];
   const archivos = {}; // imágenes de pases precargadas (el menú nativo exige compartir en el mismo toque)
 
@@ -134,20 +135,29 @@
       elegidos.append(chip);
     });
     const t = seleccion.reduce((a, b) => a + b, 0);
+    const nombre = inputNombre.value.trim();
     total.textContent = t
       ? `Total: ${t} ${plural(t, 'lugar', 'lugares')}`
-      : 'Sin pases: se enviará solo la invitación.';
+      : 'Toca cuántas personas van.';
     adjuntar.closest('label').hidden = !t;
+    // Compartir solo se activa con un nombre y al menos un pase: así nunca se reenvía
+    // por error una invitación vacía o la del invitado anterior
+    const listo = Boolean(t && nombre);
+    btnEnviar.disabled = !listo;
+    falta.textContent = listo ? '' : (!nombre && !t ? 'Escribe el nombre y elige los pases para poder compartir.' : !nombre ? 'Escribe el nombre del invitado para poder compartir.' : 'Elige al menos un pase para poder compartir.');
   }
+  inputNombre.addEventListener('input', pintar);
 
   document.querySelectorAll('#org-pases button').forEach((b) => b.addEventListener('click', () => {
     if (seleccion.length >= 12) return;
     seleccion.push(+b.dataset.n); pintar();
   }));
 
-  function abrir() {
+  function abrir(enviadaA = '') {
     precargar();
     seleccion = []; inputNombre.value = ''; pintar();
+    enviado.textContent = enviadaA ? `✓ Enviada a ${enviadaA}. Ahora escribe el siguiente invitado.` : '';
+    enviado.hidden = !enviadaA;
     fondoEnvio.hidden = false;
     document.body.style.overflow = 'hidden';
   }
@@ -189,7 +199,7 @@
     }
     ocultar();
     // mismo menú nativo (WhatsApp, Messenger, correo…); al volver, el panel reaparece para enviar otra
-    window.compartir(datos).finally(() => { if (activo) abrir(); });
+    window.compartir(datos).finally(() => { if (activo) abrir(nombre); });
   });
 
   window.organizador = { activo: () => activo, abrir };

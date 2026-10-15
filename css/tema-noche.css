@@ -258,3 +258,6 @@ body { background-image: none; background-attachment: scroll; }
 .cadena .flor, .flor-lado { will-change: transform; }
 /* paneles blancos del organizador: enlaces en azul para que se lean */
 .org-panel .enlace { color: #2f5aa8; border-bottom-color: #a9bfe6; }
+.org-enviado { margin: -0.2rem 0 0.2rem; padding: 0.6rem 0.9rem; border-radius: 12px; background: #e7f5ec; color: #1d6b3a; font-size: 0.95rem; text-align: center; }
+.org-falta { margin: 0; font-size: 0.88rem; color: #5d6886; text-align: center; min-height: 1.2em; }
+.org-panel .boton-lleno[disabled] { opacity: 0.4; box-shadow: none; filter: grayscale(0.6); }
