@@ -77,6 +77,7 @@
     btnMusica.setAttribute('aria-label', mudo ? 'Activar sonido' : 'Silenciar');
   }
   btnMusica.addEventListener('click', () => {
+    if (!vSent.muted) sonidoSent(false); // si sonaba el video de "Sentenciados", se calla primero
     const activar = video.muted || video.paused; // silenciado o detenido → que suene
     video.muted = !activar;
     if (video.paused) video.play().catch(() => {});
@@ -87,6 +88,30 @@
     if (document.hidden && !video.paused) { video.pause(); video.dataset.reanudar = '1'; }
     else if (!document.hidden && video.dataset.reanudar) { video.play().catch(() => {}); delete video.dataset.reanudar; }
   });
+
+  // ---------- Video "Sentenciados": suena solo si lo piden; mientras, la música general calla ----------
+  const vSent = $('#video-sentenciados'), btnSent = $('#sentenciados-sonido');
+  let musicaAntes = null; // estado de la música general antes de dar sonido a este video
+  function sonidoSent(activar) {
+    if (activar) {
+      if (musicaAntes === null) musicaAntes = video.muted;
+      video.muted = true;
+      vSent.muted = false;
+      vSent.play().catch(() => {});
+    } else {
+      vSent.muted = true;
+      if (musicaAntes !== null) { video.muted = musicaAntes; musicaAntes = null; }
+    }
+    btnSent.setAttribute('aria-pressed', String(activar));
+    btnSent.querySelector('span').textContent = activar ? 'Silenciar' : 'Activar sonido';
+    btnSent.querySelector('use').setAttribute('href', activar ? '#i-silencio' : '#i-sonido');
+    marcarSonido();
+  }
+  btnSent.addEventListener('click', () => sonidoSent(vSent.muted));
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) { if (!document.body.classList.contains('sobre-cerrado')) vSent.play().catch(() => {}); }
+    else { vSent.pause(); if (!vSent.muted) sonidoSent(false); }
+  }, { threshold: 0.45 }).observe(vSent);
 
   // ---------- Progreso de la portada (--p) y salida de la foto fija (--salida) ----------
   const portada = $('#portada');
