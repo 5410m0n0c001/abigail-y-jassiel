@@ -57,19 +57,27 @@
       if (p === undefined) {
         const r = f.cadena.getBoundingClientRect();
         // 0 cuando la guirnalda asoma por abajo; 1 cuando llega al 35 % superior de la pantalla
-        p = reducir ? 1 : clamp01((innerHeight - r.top) / (innerHeight * 0.75));
+        // guirnaldas lejos de la pantalla: no se tocan (ahorra trabajo en cada scroll)
+        p = r.bottom < -innerHeight || r.top > innerHeight * 2 ? -1 : (reducir ? 1 : clamp01((innerHeight - r.top) / (innerHeight * 0.75)));
         cache.set(f.cadena, p);
       }
-      const local = clamp01((p - f.retraso) / 0.6);
+      if (p < 0) continue;
+      const local = Math.round(clamp01((p - f.retraso) / 0.6) * 200) / 200;
+      if (local === f.ultimo) continue; // sin cambio: no se escribe nada
+      f.ultimo = local;
       const e = local * (ETAPAS - 1);
       f.imgs.forEach((img, k) => { img.style.opacity = clamp01(1 - Math.abs(e - k)).toFixed(3); });
-      f.el.style.setProperty('--esc', (0.55 + 0.45 * local).toFixed(3));
-      f.el.style.setProperty('--rot', `${(f.giro * (1 - local) * 2 + f.giro * 0.25).toFixed(1)}deg`);
+      f.el.style.transform = `rotate(${(f.giro * (1 - local) * 2 + f.giro * 0.25).toFixed(1)}deg) scale(${(0.55 + 0.45 * local).toFixed(3)})`;
     }
   }
   addEventListener('scroll', () => { if (!pendienteF) { pendienteF = true; requestAnimationFrame(florecer); } }, { passive: true });
   addEventListener('resize', florecer);
   florecer();
+
+  const vigiaPetalos = new IntersectionObserver((es) => es.forEach((e) => {
+    e.target.querySelector('.petalos')?.classList.toggle('pausado', !e.isIntersecting);
+  }));
+  document.querySelectorAll('.petalos').forEach((p) => vigiaPetalos.observe(p.parentElement));
 
   // ---------- rosas grandes que entran por los costados ----------
   const LADOS = [

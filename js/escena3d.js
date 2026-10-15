@@ -14,7 +14,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { MODELOS } from './modelos3d.js?v=20261014c';
+import { MODELOS } from './modelos3d.js?v=20261014d';
 
 const reducir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const gamaBaja = (navigator.hardwareConcurrency || 4) <= 4 && (navigator.deviceMemory || 4) <= 4;
@@ -77,7 +77,7 @@ async function iniciar() {
 
   const renderer = new THREE.WebGLRenderer({ antialias: devicePixelRatio < 2, alpha: true, powerPreference: 'high-performance' });
   // en celular basta 1.5x: se ve nítida y usa ~45 % menos memoria gráfica que 2x
-  let pr = Math.min(devicePixelRatio, gamaBaja ? 1.25 : (innerWidth < 900 ? 1.5 : 2));
+  let pr = Math.min(devicePixelRatio, gamaBaja ? 1 : (innerWidth < 900 ? 1.25 : 2)); // en celular 1.25x: nítida y ligera
   renderer.setPixelRatio(pr);
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -257,6 +257,7 @@ async function iniciar() {
   }
   const mezclar = (a, b, k) => ({ x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), s: lerp(a.s, b.s, k), a: lerp(a.a, b.a, k), o: lerp(a.o, b.o, k) });
 
+  let ultimaOpacidad = '', capaOculta = false, capaAlFrente = false;
   function dibujar(dt) {
     t += dt;
     const suavizado = dt === 0 ? 1 : 1 - Math.exp(-dt * 6);
@@ -304,11 +305,17 @@ async function iniciar() {
     destellos.rotation.y = -t * 0.05;
     matDestello.uniforms.uBrillo.value = lerp(0.35, 0.9, modeloActual === 'rosa' ? a : 1) * clamp01(actual.o * 1.4);
     matDestello.uniforms.uT.value = t;
-    capa.style.opacity = actual.o.toFixed(3);
+    // (lecturas del DOM antes de escribir estilos: evita recalcular el diseño dos veces por cuadro)
     // la capa 3D sube por encima del contenido mientras una foto cruza el centro de la pantalla
     let alFrente = false;
     for (const f of frentes) { const r = f.getBoundingClientRect(); if (r.top < innerHeight * 0.75 && r.bottom > innerHeight * 0.25) { alFrente = true; break; } }
-    capa.classList.toggle('al-frente', alFrente);
+    // solo se escribe en el DOM cuando el valor cambia (cada escritura obliga a recalcular estilos)
+    const op = actual.o.toFixed(2);
+    if (op !== ultimaOpacidad) { capa.style.opacity = op; ultimaOpacidad = op; }
+    const oculta = actual.o < 0.02;
+    if (oculta !== capaOculta && !pausada) { capa.style.visibility = oculta ? 'hidden' : ''; capaOculta = oculta; }
+    if (oculta) return; // invisible (p. ej. durante el video): no se dibuja
+    if (alFrente !== capaAlFrente) { capa.classList.toggle('al-frente', alFrente); capaAlFrente = alFrente; }
     renderer.render(scene, camera);
   }
 
@@ -360,7 +367,7 @@ async function iniciar() {
     reanudar() {
       if (!pausada) return;
       pausada = false;
-      capa.style.visibility = '';
+      capa.style.visibility = ''; capaOculta = false;
       tam();
       dibujar(0);
     },

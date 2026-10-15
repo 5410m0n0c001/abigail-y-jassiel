@@ -107,15 +107,19 @@
 
   // ---------- Progreso de la portada (--p) y salida de la foto fija (--salida) ----------
   const portada = $('#portada');
-  const raiz = document.documentElement.style;
-  let pendienteP = false;
+  // las variables se escriben solo en los elementos que las usan: en la raíz obligarían a
+  // recalcular el estilo de toda la página en cada cuadro de scroll
+  const fotoPortada = $('.portada-foto');
+  let pendienteP = false, ultP = '', ultS = '';
   function progreso() {
     pendienteP = false;
     const r = portada.getBoundingClientRect();
     const recorrido = r.height - innerHeight;
     const p = reducir || recorrido <= 0 ? 1 : Math.min(1, Math.max(0, -r.top / recorrido));
-    raiz.setProperty('--p', p.toFixed(4));
-    raiz.setProperty('--salida', Math.max(0, innerHeight - r.bottom).toFixed(0));
+    // solo cuando cambian: ya pasada la portada no se tocan los estilos en cada scroll
+    const vp = p.toFixed(3), vs = Math.min(innerHeight * 1.2, Math.max(0, innerHeight - r.bottom)).toFixed(0);
+    if (vp !== ultP) { ultP = vp; portada.style.setProperty('--p', vp); fotoPortada.style.setProperty('--p', vp); }
+    if (vs !== ultS) { ultS = vs; fotoPortada.style.setProperty('--salida', vs); }
   }
   addEventListener('scroll', () => { if (!pendienteP) { pendienteP = true; requestAnimationFrame(progreso); } }, { passive: true });
   addEventListener('resize', progreso);

@@ -225,3 +225,34 @@ main textarea:focus, main input:focus { border-color: var(--champan); }
 @media (prefers-reduced-motion: reduce) {
   .cielo i { animation: none; }
 }
+
+/* ============ Rendimiento (scroll fluido en celular) ============
+   - Sin desenfoque en vivo (backdrop-filter) sobre la escena 3D: las tarjetas usan un azul translúcido.
+   - El cielo vive en una capa fija propia que se compone una vez (el fondo "fixed" del body se repintaba).
+   - Sin filtros de sombra en elementos que cambian con el scroll (rosas, nombres, foto de portada). */
+body { background-image: none; background-attachment: scroll; }
+.cielo { will-change: transform; transform: translateZ(0); }
+.cielo::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(60% 38% at 88% 12%, rgba(64, 112, 230, 0.42), transparent 70%),
+    radial-gradient(55% 34% at 6% 48%, rgba(38, 84, 200, 0.38), transparent 70%),
+    radial-gradient(70% 40% at 72% 92%, rgba(96, 82, 210, 0.26), transparent 70%),
+    radial-gradient(40% 25% at 30% 8%, rgba(150, 190, 255, 0.16), transparent 70%),
+    linear-gradient(180deg, var(--noche-1) 0%, var(--noche-2) 45%, #081638 100%);
+}
+.cielo i { will-change: transform, opacity; }
+.tarjeta, .menu-panel, .confirmar-panel, .reto-carta, .album-qr, .album-vacio, .cuenta div, .hashtag-enlace {
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  background: linear-gradient(160deg, rgba(46, 80, 170, 0.62), rgba(14, 30, 78, 0.74));
+}
+.porcelana .tarjeta, .porcelana .menu-panel { background: rgba(255, 255, 255, 0.9); }
+.porcelana::before { -webkit-backdrop-filter: none; backdrop-filter: none; background-color: rgba(241, 245, 252, 0.62); }
+.nombre-script, .titulo-boda span, .cuenta-fin, .despedida .nombre-script, .portada-nombre .nombre-script { filter: none; }
+.cadena .flor, .flor-lado { filter: none; }
+.portada-foto { background: #050d24; will-change: transform; }
+.portada-foto img, .portada-foto video { filter: none; opacity: calc(1 - var(--p) * 0.4); will-change: transform, opacity; }
+.petalos.pausado i { animation-play-state: paused; }
+.compartir, .musica { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(8, 20, 52, 0.9); }
+/* cada flor de las guirnaldas en su propia capa: al florecer solo se repinta su recuadro, no la página */
+.cadena .flor, .flor-lado { will-change: transform; }
