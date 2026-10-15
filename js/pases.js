@@ -5,7 +5,7 @@
 //     el botón Compartir abre primero la ventana de pases y luego el menú nativo. Al recargar se apaga.
 (() => {
   const $ = (s, el = document) => el.querySelector(s);
-  const CLAVE_SHA256 = '5d35ccf8c6cf62aff4e04fc1b494e5c67da5fa31b4324da43218d51c7e60c5b2'; // SHA-256 de la clave (provisional; cambiarla antes de entregar)
+  const CLAVE_SHA256 = '0f504bc265f2895847485f92725eb18d1717fa37151536136a68660b9dbfc00b'; // SHA-256 de la clave en minúsculas (no distingue mayúsculas)
   const BASE = location.origin + location.pathname.replace(/[^/]*$/, ''); // carpeta de la invitación
   const MAX_PREVIA = 20; // hay imagen de vista previa (p/N.html) para 1 a 20 personas
   const plural = (n, uno, varios) => (n === 1 ? uno : varios);
@@ -101,7 +101,7 @@
   }
   $('#org-pin-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (await sha256(inputPin.value.trim()) !== CLAVE_SHA256) {
+    if (await sha256(inputPin.value.trim().toLowerCase()) !== CLAVE_SHA256) {
       errorPin.hidden = false; inputPin.select(); return;
     }
     activo = true;

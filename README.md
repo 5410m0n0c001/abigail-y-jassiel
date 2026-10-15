@@ -63,7 +63,7 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 | Hashtag `#AbiYJasiel2026` (validar en Instagram que esté libre) | `index.html` → sección comparte |
 | Clave del panel de organizador | `js/pases.js` → `CLAVE_SHA256` |
 
-Menú: el checklist decía carnitas 90 % puerco / 10 % pollo; por corrección es **carnitas de res y pollo**.
+Menú: el checklist decía carnitas 90 % puerco / 10 % pollo; por corrección es **barbacoa de res**.
 
 ## Probar en local
 ```bash

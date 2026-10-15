@@ -256,3 +256,5 @@ body { background-image: none; background-attachment: scroll; }
 .compartir, .musica { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(8, 20, 52, 0.9); }
 /* cada flor de las guirnaldas en su propia capa: al florecer solo se repinta su recuadro, no la página */
 .cadena .flor, .flor-lado { will-change: transform; }
+/* paneles blancos del organizador: enlaces en azul para que se lean */
+.org-panel .enlace { color: #2f5aa8; border-bottom-color: #a9bfe6; }

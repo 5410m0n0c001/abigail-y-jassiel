@@ -32,7 +32,7 @@
       'Foto de la reacción más exagerada a un chiste.',
       'Foto de alguien escondido detrás de un centro de mesa.',
       'Foto con la peor pose de modelo que se te ocurra.',
-      'Foto de alguien comiendo carnitas como si fuera lo más delicioso del mundo.',
+      'Foto de alguien comiendo barbacoa como si fuera lo más delicioso del mundo.',
       'Foto de dos personas con la misma pose sin ponerse de acuerdo.',
       'Foto imitando a alguien de tu mesa (con cariño).',
       'Foto de un "abrazo de oso" sorpresa.',
