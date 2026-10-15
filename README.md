@@ -48,8 +48,6 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 
 | Dato | Dónde se cambia |
 |---|---|
-| Enlace de Google Maps del jardín y dirección | `js/config.js` → `mapa`; dirección en `index.html` (`data-dir-jardin`) |
-| Coordenadas para el clima | `js/config.js` → `clima` |
 | Padres y padrinos | `index.html` → sección familia |
 | Tema de la entrada triunfal | `index.html` → minuto a minuto |
 | ¿Evento sin alcohol? (barra mix e "Información importante") | `index.html` (`data-alcohol`) |

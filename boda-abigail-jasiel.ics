@@ -5,13 +5,14 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:boda-abigail-jasiel-20261213@initidea
-DTSTAMP:20261013T120000Z
+DTSTAMP:20261014T120000Z
 DTSTART:20261213T220000Z
 DTEND:20261214T040000Z
 SUMMARY:Boda de Abigail & Jasiel
-LOCATION:Jardín Mina Real
-DESCRIPTION:Ceremonia religiosa a las 4:00 p. m. y recepción en el mismo jardín.
-Invitación: https://5410m0n0c001.github.io/abigail-y-jassiel/
+LOCATION:Jardín Mina Real\, Narciso Mendoza 33\, 62760 Emiliano Zapata\, Mor.
+DESCRIPTION:Ceremonia religiosa a las 4:00 p. m. y recepción en el mismo jar
+ dín.\nUbicación: https://share.google/Yt00TIFZZcfs0gw2a\nInvitación: https://
+ 5410m0n0c001.github.io/abigail-y-jassiel/
 URL:https://5410m0n0c001.github.io/abigail-y-jassiel/
 BEGIN:VALARM
 TRIGGER:-P1D

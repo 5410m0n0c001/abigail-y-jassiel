@@ -10,11 +10,11 @@ window.INVITACION = {
   // WhatsApp que recibe confirmaciones y el buzón de deseos (lada 52 + número, sin espacios)
   whatsapp: '527772600914',
 
-  // PENDIENTE: enlace de Google Maps del jardín (los botones "Cómo llegar" lo usan)
-  mapa: '',
+  // Enlace de Google del jardín (los botones "Cómo llegar" lo usan)
+  mapa: 'https://share.google/Yt00TIFZZcfs0gw2a',
 
-  // PENDIENTE: coordenadas del jardín para el pronóstico del clima (Windy)
-  clima: { lat: null, lon: null },
+  // Coordenadas del jardín para el pronóstico del clima (Windy); fuente: ficha de Bodas.com.mx
+  clima: { lat: 18.8185, lon: -99.2319 },
 
   album: {
     supabaseUrl: 'https://fhnnqmbbeeobassvfeox.supabase.co',
