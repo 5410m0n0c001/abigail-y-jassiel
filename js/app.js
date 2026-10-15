@@ -77,7 +77,6 @@
     btnMusica.setAttribute('aria-label', mudo ? 'Activar sonido' : 'Silenciar');
   }
   btnMusica.addEventListener('click', () => {
-    if (!vSent.muted) sonidoSent(false); // si sonaba el video de "Sentenciados", se calla primero
     const activar = video.muted || video.paused; // silenciado o detenido → que suene
     video.muted = !activar;
     if (video.paused) video.play().catch(() => {});
@@ -89,28 +88,21 @@
     else if (!document.hidden && video.dataset.reanudar) { video.play().catch(() => {}); delete video.dataset.reanudar; }
   });
 
-  // ---------- Video "Sentenciados": suena solo si lo piden; mientras, la música general calla ----------
+  // ---------- Video "Sentenciados": solo trae efectos de sonido, así que suena junto con la música ----------
+  // Al aparecer intenta reproducirse con sonido; si el navegador no lo permite, arranca en silencio
+  // y el botón deja activarlo. Al salir de la pantalla se pausa.
   const vSent = $('#video-sentenciados'), btnSent = $('#sentenciados-sonido');
-  let musicaAntes = null; // estado de la música general antes de dar sonido a este video
-  function sonidoSent(activar) {
-    if (activar) {
-      if (musicaAntes === null) musicaAntes = video.muted;
-      video.muted = true;
-      vSent.muted = false;
-      vSent.play().catch(() => {});
-    } else {
-      vSent.muted = true;
-      if (musicaAntes !== null) { video.muted = musicaAntes; musicaAntes = null; }
-    }
-    btnSent.setAttribute('aria-pressed', String(activar));
-    btnSent.querySelector('span').textContent = activar ? 'Silenciar' : 'Activar sonido';
-    btnSent.querySelector('use').setAttribute('href', activar ? '#i-silencio' : '#i-sonido');
-    marcarSonido();
+  function marcarSent() {
+    btnSent.setAttribute('aria-pressed', String(!vSent.muted));
+    btnSent.querySelector('span').textContent = vSent.muted ? 'Activar sonido' : 'Silenciar';
+    btnSent.querySelector('use').setAttribute('href', vSent.muted ? '#i-sonido' : '#i-silencio');
   }
-  btnSent.addEventListener('click', () => sonidoSent(vSent.muted));
+  btnSent.addEventListener('click', () => { vSent.muted = !vSent.muted; vSent.play().catch(() => {}); marcarSent(); });
   new IntersectionObserver(([e]) => {
-    if (e.isIntersecting) { if (!document.body.classList.contains('sobre-cerrado')) vSent.play().catch(() => {}); }
-    else { vSent.pause(); if (!vSent.muted) sonidoSent(false); }
+    if (!e.isIntersecting) { vSent.pause(); return; }
+    if (document.body.classList.contains('sobre-cerrado')) return;
+    if (!vSent.dataset.probado) { vSent.dataset.probado = '1'; vSent.muted = silencio; } // primera vez: con sonido
+    vSent.play().catch(() => { vSent.muted = true; vSent.play().catch(() => {}); }).finally(marcarSent);
   }, { threshold: 0.45 }).observe(vSent);
 
   // ---------- Progreso de la portada (--p) y salida de la foto fija (--salida) ----------
