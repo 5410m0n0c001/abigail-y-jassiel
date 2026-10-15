@@ -83,6 +83,8 @@ main .porcelana, main .hoja {
 /* ---------- tipografía con brillo champán ---------- */
 .nombre-script, .titulo-boda span, .cuenta-fin, .despedida .nombre-script {
   background: var(--oro-texto); -webkit-background-clip: text; background-clip: text; color: transparent;
+  /* la caligrafía se sale de su caja: con margen interno el degradado no recorta las letras (J, g, l) */
+  padding: 0.12em 0.22em 0.18em; margin: -0.12em -0.22em -0.18em;
   filter: drop-shadow(0 2px 10px rgba(231, 207, 156, 0.25));
 }
 .portada-nombre .nombre-script { filter: drop-shadow(0 3px 16px rgba(0, 0, 0, 0.45)); }
@@ -152,9 +154,9 @@ main textarea:focus, main input:focus { border-color: var(--champan); }
 .porcelana::before {
   content: ""; position: absolute; z-index: -1; top: 0.8rem; bottom: 0.8rem; left: var(--hi, 0.4rem); right: var(--hd, 0.4rem);
   border-radius: 6px;
-  background-color: #f1f5fc;
+  background-color: rgba(241, 245, 252, 0.5); /* translúcida: deja ver los objetos 3D que pasan detrás */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cg fill='%232f5aa8'%3E%3Cg transform='translate(36 38)' fill-opacity='.11'%3E%3Cellipse rx='7' ry='13' transform='translate(0 -12)'/%3E%3Cellipse rx='7' ry='13' transform='rotate(72) translate(0 -12)'/%3E%3Cellipse rx='7' ry='13' transform='rotate(144) translate(0 -12)'/%3E%3Cellipse rx='7' ry='13' transform='rotate(216) translate(0 -12)'/%3E%3Cellipse rx='7' ry='13' transform='rotate(288) translate(0 -12)'/%3E%3Ccircle r='5' fill-opacity='1'/%3E%3C/g%3E%3Cg transform='translate(108 104) scale(.72)' fill-opacity='.13'%3E%3Cellipse rx='7' ry='13' transform='translate(0 -12)'/%3E%3Cellipse rx='7' ry='13' transform='rotate(72) translate(0 -12)'/%3E%3Cellipse rx='7' ry='13' transform='rotate(144) translate(0 -12)'/%3E%3Cellipse rx='7' ry='13' transform='rotate(216) translate(0 -12)'/%3E%3Cellipse rx='7' ry='13' transform='rotate(288) translate(0 -12)'/%3E%3Ccircle r='5' fill-opacity='1'/%3E%3C/g%3E%3Cg fill-opacity='.1'%3E%3Cpath d='M60 58c10-2 18 4 20 12-10 2-18-4-20-12zM84 124c-2-10 4-18 12-20 2 10-4 18-12 20zM118 30c8 2 12 10 10 16-8-2-12-10-10-16z'/%3E%3Ccircle cx='128' cy='62' r='3'/%3E%3Ccircle cx='20' cy='112' r='3.5'/%3E%3Ccircle cx='70' cy='140' r='2.5'/%3E%3Ccircle cx='140' cy='138' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
-    radial-gradient(120% 80% at 50% 0%, #ffffff, #e5edfa);
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.5), rgba(229, 237, 250, 0.32));
   background-size: 150px 150px, 100% 100%;
   -webkit-mask:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14'%3E%3Cpath d='M0 14A20 14 0 0 1 40 14z'/%3E%3C/svg%3E") top left / 40px 14px repeat-x,
@@ -165,6 +167,7 @@ main textarea:focus, main input:focus { border-color: var(--champan); }
     linear-gradient(#000, #000) 0 13px / 100% calc(100% - 26px) no-repeat,
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14'%3E%3Cpath d='M0 0A20 14 0 0 0 40 0z'/%3E%3C/svg%3E") bottom left / 40px 14px repeat-x;
   box-shadow: 0 30px 60px rgba(2, 8, 26, 0.5);
+  -webkit-backdrop-filter: blur(4px) saturate(1.2); backdrop-filter: blur(4px) saturate(1.2);
 }
 /* filo azul interior, como plato de porcelana */
 .porcelana::after {

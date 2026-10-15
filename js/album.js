@@ -113,7 +113,7 @@
   window.prepararCamara = () => {
     camaraAbierta = true;
     try { sessionStorage.setItem('camara-pendiente', String(Date.now())); } catch { /* modo privado */ }
-    const musica = document.getElementById('audio');
+    const musica = document.getElementById('video-historia'); // el video lleva la música
     if (!musica.paused) { musica.pause(); document.getElementById('musica').classList.add('pausada'); }
     window.__escena3d?.pausar();
   };

@@ -6,7 +6,7 @@ Invitación estática (HTML/CSS/JS, sin build) que fusiona tres invitaciones:
   desde la esquina, tarjetas de papel para los lugares, cadenas de rosas y pétalos. Recoloreado de carmesí a
   **azul marino y blanco** (paleta del montaje: azul marino, arena, ivory, rosa pastel).
 - **XV Azul 3D** (funciones): escena 3D fija que acompaña el scroll, álbum en Supabase con cámara,
-  ruleta de 200 retos, QR para mesas, pases personalizados, panel de organizador, buzón de deseos y
+  ruleta de 180 retos (sin retos de baile), QR para mesas, pases personalizados, panel de organizador, buzón de deseos y
   botón de compartir que florece en rosa.
 - **Demo** (funciones): agendar en el calendario (botón nativo: `boda-abigail-jasiel.ics` en iPhone, Google
   Calendar en Android), menú con pestañas, hospedaje, clima, barra de navegación inferior, **Ubica tu mesa**

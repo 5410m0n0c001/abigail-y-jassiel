@@ -90,8 +90,8 @@
   });
 
   // ---------- pétalos de la portada ----------
-  const petalos = document.getElementById('petalos');
-  if (petalos && !reducir) {
+  // (portada y sección del video)
+  if (!reducir) document.querySelectorAll('.petalos').forEach((petalos) => {
     for (let i = 0; i < 18; i++) {
       const p = document.createElement('i');
       p.style.setProperty('--x', `${Math.random() * 100}%`);
@@ -102,7 +102,7 @@
       if (i % 3 === 0) p.style.setProperty('--color-petalo', 'radial-gradient(circle at 30% 30%, #ffffff, #dfe6f3 70%)');
       petalos.append(p);
     }
-  }
+  });
 
   function animar() {
     const { gsap, ScrollTrigger } = window;

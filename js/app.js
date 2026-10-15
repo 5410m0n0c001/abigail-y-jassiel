@@ -16,8 +16,10 @@
   };
 
   // ---------- Sobre + música ----------
+  // La música es el sonido del video de la historia (sección antes de la portada). El botón de la bocina
+  // solo silencia: el video sigue corriendo.
   const sobre = $('#sobre');
-  const audio = $('#audio');
+  const video = $('#video-historia');
   const btnMusica = $('#musica');
   const btnCompartir = $('#compartir');
   const nav = $('#navegacion');
@@ -31,8 +33,9 @@
     if (sobre.classList.contains('abriendo')) return;
     sobre.classList.add('abriendo');
     document.body.classList.remove('sobre-cerrado');
-    if (silencio) btnMusica.classList.add('pausada');
-    else audio.play().catch(() => btnMusica.classList.add('pausada'));
+    video.muted = silencio;
+    video.play().catch(() => { video.muted = true; video.play().catch(() => {}); }).finally(marcarSonido);
+    marcarSonido();
     mostrarControles();
     requestAnimationFrame(() => btnCompartir.classList.add('entra'));
     // con el sobre cerrado la página medía una pantalla: las animaciones recalculan sus posiciones
@@ -68,14 +71,21 @@
     $('#llegada-ver').addEventListener('click', () => llegada.remove());
   }
 
+  function marcarSonido() {
+    const mudo = video.muted || video.paused;
+    btnMusica.classList.toggle('pausada', mudo);
+    btnMusica.setAttribute('aria-label', mudo ? 'Activar sonido' : 'Silenciar');
+  }
   btnMusica.addEventListener('click', () => {
-    if (audio.paused) { audio.play(); btnMusica.classList.remove('pausada'); btnMusica.setAttribute('aria-label', 'Pausar música'); }
-    else { audio.pause(); btnMusica.classList.add('pausada'); btnMusica.setAttribute('aria-label', 'Reproducir música'); }
+    const activar = video.muted || video.paused; // silenciado o detenido → que suene
+    video.muted = !activar;
+    if (video.paused) video.play().catch(() => {});
+    marcarSonido();
   });
   // pausar si la persona cambia de app
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden && !audio.paused) { audio.pause(); audio.dataset.reanudar = '1'; }
-    else if (!document.hidden && audio.dataset.reanudar) { audio.play().catch(() => {}); delete audio.dataset.reanudar; }
+    if (document.hidden && !video.paused) { video.pause(); video.dataset.reanudar = '1'; }
+    else if (!document.hidden && video.dataset.reanudar) { video.play().catch(() => {}); delete video.dataset.reanudar; }
   });
 
   // ---------- Progreso de la portada (--p) y salida de la foto fija (--salida) ----------

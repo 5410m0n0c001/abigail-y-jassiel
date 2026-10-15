@@ -14,7 +14,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { MODELOS } from './modelos3d.js?v=20261013c';
+import { MODELOS } from './modelos3d.js?v=20261014a';
 
 const reducir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const gamaBaja = (navigator.hardwareConcurrency || 4) <= 4 && (navigator.deviceMemory || 4) <= 4;
@@ -25,6 +25,7 @@ const slotCierre = document.querySelector('[data-rosa-slot="cierre"]');
 const slotFinal = document.querySelector('[data-rosa-slot="final"]');
 const secciones = [...document.querySelectorAll('[data-lado]')];
 const frentes = [...document.querySelectorAll('[data-frente]')];
+const intro = document.getElementById('intro-video');
 const ESCALA_OBJETO = 0.85; // los objetos miden más que la cabeza de la rosa
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -272,6 +273,9 @@ async function iniciar() {
       giro = 1.9 + (scrollY - (portada.offsetHeight - innerHeight)) * 0.0014;
     }
     if (!reducir) giro += t * 0.12;
+
+    // mientras se ve el video de la historia, la escena 3D no aparece
+    if (intro && intro.getBoundingClientRect().bottom > innerHeight * 0.4) destino.o = 0;
 
     // si el objeto destino es otro, primero se encoge el actual (aunque el scroll vaya rápido)
     if (destino.m !== modeloActual) {
