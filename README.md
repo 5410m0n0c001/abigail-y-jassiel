@@ -9,7 +9,7 @@ Invitación estática (HTML/CSS/JS, sin build) que fusiona tres invitaciones:
   ruleta de 180 retos (sin retos de baile), QR para mesas, pases personalizados, panel de organizador, buzón de deseos y
   botón de compartir que florece en rosa.
 - **Demo** (funciones): agendar en el calendario (botón nativo: `boda-abigail-jasiel.ics` en iPhone, Google
-  Calendar en Android), menú con pestañas, hospedaje, clima, barra de navegación inferior, **Ubica tu mesa**
+  Calendar en Android), menú con pestañas, clima, barra de navegación inferior, **Ubica tu mesa**
   (`mapa.html`: croquis 3D con model-viewer),
   recorrido guiado la primera vez y confeti cuando llega la hora del evento.
 
@@ -50,14 +50,12 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 |---|---|
 | Padres de la novia y padrinos (los del novio ya están) | `index.html` → sección familia |
 | ¿Niños? / menú infantil | `index.html` (`data-ninos`) |
-| Código de vestimenta | `index.html` → sección vestimenta |
-| Mesa de regalos: tienda (la transferencia BBVA ya está) | `index.html` → sección regalos (quitar `aria-disabled` del enlace) |
-| Hospedaje | `index.html` → sección hospedaje |
 | Música: es el sonido del video de la historia | `video/historia.mp4` |
 | Video de portada (sesión del 14 de octubre) | `index.html` → `.portada-foto` (ver comentario) |
 | Hashtag `#AbiYJasiel2026` (validar en Instagram que esté libre) | `index.html` → sección comparte |
 | Clave del panel de organizador | `js/pases.js` → `CLAVE_SHA256` |
 
+Vestimenta: no usar azul marino, rojo ni blanco. Sin tienda de regalos ni hospedaje sugerido (decisión de los novios).
 Bebidas: celebración cristiana, sin alcohol (no se anuncia como prohibición; simplemente no se sirve).
 Menú: el checklist decía carnitas 90 % puerco / 10 % pollo; por corrección es **barbacoa de res**.
 

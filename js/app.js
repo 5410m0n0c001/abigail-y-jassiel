@@ -203,10 +203,6 @@
     clima.href = `https://www.windy.com/${cfg.clima.lat}/${cfg.clima.lon}?${cfg.clima.lat},${cfg.clima.lon},12`;
     $('#clima-pendiente').hidden = true;
   } else clima.addEventListener('click', (e) => { e.preventDefault(); window.avisar('El pronóstico estará disponible muy pronto'); });
-  const mesaRegalos = $('#mesa-regalos-enlace');
-  mesaRegalos.addEventListener('click', (e) => {
-    if (mesaRegalos.getAttribute('aria-disabled') === 'true') { e.preventDefault(); window.avisar('La mesa de regalos estará disponible muy pronto'); }
-  });
 
   // ---------- Menú: pestañas ----------
   const pestanas = $$('.menu-pestanas [role="tab"]');

@@ -33,8 +33,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Updock&display=swap" rel="stylesheet">
   <link rel="preload" href="models/rosa.glb" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
-  <link rel="stylesheet" href="css/boda.css?v=20261015b">
-  <link rel="stylesheet" href="css/tema-noche.css?v=20261015b">
+  <link rel="stylesheet" href="css/boda.css?v=20261015c">
+  <link rel="stylesheet" href="css/tema-noche.css?v=20261015c">
 
   <script type="importmap">
     {
@@ -44,19 +44,19 @@
       }
     }
   </script>
-  <script src="js/config.js?v=20261015b"></script>
+  <script src="js/config.js?v=20261015c"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js"></script>
-  <script defer src="js/app.js?v=20261015b"></script>
-  <script defer src="js/carmesi.js?v=20261015b"></script>
-  <script defer src="js/pases.js?v=20261015b"></script>
-  <script type="module" src="js/escena3d.js?v=20261015b"></script>
+  <script defer src="js/app.js?v=20261015c"></script>
+  <script defer src="js/carmesi.js?v=20261015c"></script>
+  <script defer src="js/pases.js?v=20261015c"></script>
+  <script type="module" src="js/escena3d.js?v=20261015c"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script defer src="js/album.js?v=20261015b"></script>
-  <script defer src="js/retos.js?v=20261015b"></script>
+  <script defer src="js/album.js?v=20261015c"></script>
+  <script defer src="js/retos.js?v=20261015c"></script>
 </head>
 
 <body class="sobre-cerrado">
@@ -82,7 +82,6 @@
       <symbol id="i-tarjeta" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></symbol>
       <symbol id="i-maleta" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3M3 12h18"/></symbol>
       <symbol id="i-vestido" viewBox="0 0 24 24"><path d="M9 2l1 4-2 5-4 10h16l-4-10-2-5 1-4M10 6h4"/></symbol>
-      <symbol id="i-hotel" viewBox="0 0 24 24"><path d="M3 21V5l9-2 9 2v16M3 21h18M8 8h2M14 8h2M8 12h2M14 12h2M10 21v-4h4v4"/></symbol>
       <symbol id="i-clima" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><path d="M8 2v1.5M2 8h1.5M3.8 3.8l1 1M12.2 3.8l-1 1"/><path d="M7 20h10a4 4 0 0 0 0-8 5 5 0 0 0-9.6 1.5A3.3 3.3 0 0 0 7 20z"/></symbol>
       <symbol id="i-calendario" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 14v4M10 16h4"/></symbol>
       <symbol id="i-galeria" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></symbol>
@@ -393,8 +392,13 @@
     <!-- VESTIMENTA -->
     <section class="vestimenta bloque" id="vestimenta" data-lado="der" data-3d="monio">
       <h2 class="titulo revelar">Código de vestimenta</h2>
-      <p class="vestimenta-tipo revelar pendiente">Por confirmar</p>
-      <p class="nota revelar">Pronto te compartiremos los detalles.</p>
+      <p class="vestimenta-tipo revelar">Te pedimos no vestir de estos colores</p>
+      <ul class="colores-evitar revelar" aria-label="Colores que no se deben usar">
+        <li><span style="--c:#14213d"></span>Azul marino</li>
+        <li><span style="--c:#c8102e"></span>Rojo</li>
+        <li><span style="--c:#ffffff"></span>Blanco</li>
+      </ul>
+      <p class="nota revelar">Gracias por tomarlo en cuenta.</p>
     </section>
 
     <section class="foto-slide" data-frente data-lado="izq" data-ancho data-3d="monio">
@@ -403,7 +407,7 @@
 
     <!-- REGALOS -->
     <section class="regalos bloque porcelana" id="regalos" data-lado="izq" data-3d="regalo">
-      <h2 class="titulo revelar">Mesa de regalos</h2>
+      <h2 class="titulo revelar">Regalos</h2>
       <p class="regalos-lema revelar">Tu presencia es nuestro mejor regalo</p>
       <div class="regalos-grid">
         <div class="tarjeta revelar">
@@ -421,22 +425,6 @@
           <button class="enlace" type="button" data-copiar="#cuenta-banco"><svg><use href="#i-copiar"/></svg>Copiar cuenta</button>
           <p class="regalo-deseo">Si nos haces llegar tu detalle a la distancia, nos encantará leer tu deseo en el <a href="#buzon">Buzón de deseos</a>.</p>
         </div>
-        <a class="tarjeta revelar" id="mesa-regalos-enlace" href="#" target="_blank" rel="noopener" aria-disabled="true">
-          <svg><use href="#i-regalo"/></svg>
-          <h3>Mesa de regalos</h3>
-          <p class="pendiente">Tienda por confirmar</p>
-        </a>
-      </div>
-    </section>
-
-    <!-- HOSPEDAJE (demo) -->
-    <section class="hospedaje bloque" id="hospedaje" data-lado="der" data-3d="pin">
-      <h2 class="titulo revelar">Hospedaje sugerido</h2>
-      <p class="revelar">Para tu comodidad te sugerimos estas opciones cercanas al jardín. Consulta disponibilidad con tiempo.</p>
-      <div class="tarjeta revelar">
-        <svg><use href="#i-hotel"/></svg>
-        <h3 class="pendiente">Opciones por confirmar</h3>
-        <p>Muy pronto publicaremos hoteles cercanos.</p>
       </div>
     </section>
 
