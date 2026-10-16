@@ -261,3 +261,15 @@ body { background-image: none; background-attachment: scroll; }
 .org-enviado { margin: -0.2rem 0 0.2rem; padding: 0.6rem 0.9rem; border-radius: 12px; background: #e7f5ec; color: #1d6b3a; font-size: 0.95rem; text-align: center; }
 .org-falta { margin: 0; font-size: 0.88rem; color: #5d6886; text-align: center; min-height: 1.2em; }
 .org-panel .boton-lleno[disabled] { opacity: 0.4; box-shadow: none; filter: grayscale(0.6); }
+/* Buzón de deseos: imagen opcional que acompaña el mensaje */
+.deseo-imagen {
+  display: flex; align-items: center; justify-content: center; gap: 0.55rem; margin: 0 0 1rem; padding: 0.85rem 1rem;
+  border: 1px dashed rgba(231, 207, 156, 0.6); border-radius: 14px; color: var(--champan); cursor: pointer;
+  font: 600 0.82rem var(--f-texto); letter-spacing: 0.08em;
+}
+.deseo-imagen small { font-weight: 400; color: var(--tinta-suave); letter-spacing: 0; }
+.deseo-imagen:hover { background: rgba(231, 207, 156, 0.08); }
+.deseo-vista { display: grid; justify-items: center; gap: 0.3rem; margin: -0.2rem 0 1rem; }
+.deseo-vista img { max-height: 10rem; width: auto; border-radius: 10px; border: 4px solid #fdfbf6; }
+.regalo-deseo { margin-top: 0.9rem !important; font-style: italic; }
+.regalo-deseo a { color: var(--azul); }

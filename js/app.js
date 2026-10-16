@@ -320,9 +320,31 @@
     if (!cfg.whatsapp) { window.avisar('Las confirmaciones se habilitarán muy pronto'); return; }
     location.href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(texto)}`;
   };
-  $('#form-deseos').addEventListener('submit', (e) => {
+  // Buzón de deseos: el mensaje puede ir con una imagen (un recuerdo, una selfie o "el detalle" que dejen).
+  // Un enlace de WhatsApp no puede llevar imágenes: con imagen se abre el menú de compartir del teléfono
+  // (el invitado elige WhatsApp y a los novios) y el texto se copia por si la app no lo pega.
+  const fotoDeseo = $('#deseo-foto'), vistaDeseo = $('#deseo-vista'), imgDeseo = $('#deseo-vista-img');
+  fotoDeseo.addEventListener('change', () => {
+    const f = fotoDeseo.files[0];
+    if (imgDeseo.src) URL.revokeObjectURL(imgDeseo.src);
+    vistaDeseo.hidden = !f;
+    if (f) imgDeseo.src = URL.createObjectURL(f); else imgDeseo.removeAttribute('src');
+  });
+  $('#deseo-quitar').addEventListener('click', () => { fotoDeseo.value = ''; fotoDeseo.dispatchEvent(new Event('change')); });
+  $('#form-deseos').addEventListener('submit', async (e) => {
     e.preventDefault();
-    abrirWhatsApp(`Mensaje para su boda:\n\n${$('#deseo').value.trim()}`);
+    const texto = `💌 Un deseo para Abigail y Jasiel:\n\n${$('#deseo').value.trim()}`;
+    const f = fotoDeseo.files[0];
+    if (!f) { abrirWhatsApp(texto); return; }
+    const datos = { files: [new File([f], f.name || 'deseo.jpg', { type: f.type || 'image/jpeg' })], text: texto };
+    navigator.clipboard?.writeText(texto).catch(() => {}); // sin await: el menú de compartir debe abrirse en el mismo toque
+    if (navigator.canShare?.(datos)) {
+      window.avisar('Elige WhatsApp y el chat de los novios');
+      try { await navigator.share(datos); } catch (err) { if (err.name !== 'AbortError') console.warn(err); }
+    } else {
+      window.avisar('Tu mensaje se copió: adjunta la imagen en el chat con el clip 📎');
+      setTimeout(() => abrirWhatsApp(texto), 1600);
+    }
   });
   $('#form-rsvp').addEventListener('submit', (e) => {
     e.preventDefault();

@@ -14,7 +14,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { MODELOS } from './modelos3d.js?v=20261014i';
+import { MODELOS } from './modelos3d.js?v=20261014j';
 
 const reducir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const gamaBaja = (navigator.hardwareConcurrency || 4) <= 4 && (navigator.deviceMemory || 4) <= 4;

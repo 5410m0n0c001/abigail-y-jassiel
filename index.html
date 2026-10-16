@@ -33,8 +33,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Updock&display=swap" rel="stylesheet">
   <link rel="preload" href="models/rosa.glb" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
-  <link rel="stylesheet" href="css/boda.css?v=20261014i">
-  <link rel="stylesheet" href="css/tema-noche.css?v=20261014i">
+  <link rel="stylesheet" href="css/boda.css?v=20261014j">
+  <link rel="stylesheet" href="css/tema-noche.css?v=20261014j">
 
   <script type="importmap">
     {
@@ -44,19 +44,19 @@
       }
     }
   </script>
-  <script src="js/config.js?v=20261014i"></script>
+  <script src="js/config.js?v=20261014j"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js"></script>
-  <script defer src="js/app.js?v=20261014i"></script>
-  <script defer src="js/carmesi.js?v=20261014i"></script>
-  <script defer src="js/pases.js?v=20261014i"></script>
-  <script type="module" src="js/escena3d.js?v=20261014i"></script>
+  <script defer src="js/app.js?v=20261014j"></script>
+  <script defer src="js/carmesi.js?v=20261014j"></script>
+  <script defer src="js/pases.js?v=20261014j"></script>
+  <script type="module" src="js/escena3d.js?v=20261014j"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script defer src="js/album.js?v=20261014i"></script>
-  <script defer src="js/retos.js?v=20261014i"></script>
+  <script defer src="js/album.js?v=20261014j"></script>
+  <script defer src="js/retos.js?v=20261014j"></script>
 </head>
 
 <body class="sobre-cerrado">
@@ -420,6 +420,7 @@
           <p class="cuenta-dato"><span>Cuenta / CLABE:</span> <b id="cuenta-banco" class="pendiente">Por confirmar</b></p>
           <p class="cuenta-dato"><span>Titular:</span> <b id="titular" class="pendiente">Por confirmar</b></p>
           <button class="enlace" type="button" data-copiar="#cuenta-banco"><svg><use href="#i-copiar"/></svg>Copiar cuenta</button>
+          <p class="regalo-deseo">Si nos haces llegar tu detalle a la distancia, nos encantará leer tu deseo en el <a href="#buzon">Buzón de deseos</a>.</p>
         </div>
         <a class="tarjeta revelar" id="mesa-regalos-enlace" href="#" target="_blank" rel="noopener" aria-disabled="true">
           <svg><use href="#i-regalo"/></svg>
@@ -507,12 +508,18 @@
     </section>
 
     <!-- BUZÓN DE DESEOS -->
-    <section class="deseos bloque" data-lado="izq" data-3d="sobre">
+    <section class="deseos bloque" id="buzon" data-lado="izq" data-3d="sobre">
       <h2 class="titulo revelar">Buzón de deseos</h2>
-      <p class="revelar">Déjanos un mensaje para nuestra nueva vida juntos. Lo recibiremos con mucho cariño.</p>
+      <p class="revelar">Déjanos un mensaje para nuestra nueva vida juntos. Si quieres, acompáñalo con una imagen: un recuerdo, una selfie o el detalle que nos quieras dejar. Lo guardaremos con mucho cariño.</p>
       <form id="form-deseos" class="revelar">
         <label class="oculto" for="deseo">Tu mensaje</label>
         <textarea id="deseo" rows="4" maxlength="500" placeholder="Escribe tu mensaje aquí" required></textarea>
+        <input type="file" id="deseo-foto" accept="image/*" hidden>
+        <label class="deseo-imagen" for="deseo-foto" id="deseo-agregar"><svg><use href="#i-galeria"/></svg>Acompañar con una imagen <small>(opcional)</small></label>
+        <div class="deseo-vista" id="deseo-vista" hidden>
+          <img id="deseo-vista-img" alt="Imagen que acompaña tu mensaje">
+          <button class="enlace" type="button" id="deseo-quitar">Quitar imagen</button>
+        </div>
         <button class="boton" type="submit"><svg><use href="#i-whatsapp"/></svg>Enviar mensaje</button>
       </form>
     </section>
