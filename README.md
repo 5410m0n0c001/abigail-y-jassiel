@@ -48,13 +48,13 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 
 | Dato | Dónde se cambia |
 |---|---|
-| ¿Niños? / menú infantil | `index.html` (`data-ninos`) |
 | Música: es el sonido del video de la historia | `video/historia.mp4` |
 | Video de portada (sesión del 14 de octubre) | `index.html` → `.portada-foto` (ver comentario) |
 | Hashtag `#AbiYJasiel2026` (validar en Instagram que esté libre) | `index.html` → sección comparte |
 | Clave del panel de organizador | `js/pases.js` → `CLAVE_SHA256` |
 
 Vestimenta: no usar azul marino, rojo ni blanco. Sin tienda de regalos ni hospedaje sugerido (decisión de los novios).
+Niños: sí asisten, sin menú infantil (comen lo mismo); no se anuncia.
 Bebidas: celebración cristiana, sin alcohol (no se anuncia como prohibición; simplemente no se sirve).
 Menú: el checklist decía carnitas 90 % puerco / 10 % pollo; por corrección es **barbacoa de res**.
 
