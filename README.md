@@ -49,8 +49,6 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 | Dato | Dónde se cambia |
 |---|---|
 | Padres de la novia y padrinos (los del novio ya están) | `index.html` → sección familia |
-| Tema de la entrada triunfal | `index.html` → minuto a minuto |
-| ¿Evento sin alcohol? (barra mix e "Información importante") | `index.html` (`data-alcohol`) |
 | ¿Niños? / menú infantil | `index.html` (`data-ninos`) |
 | Código de vestimenta | `index.html` → sección vestimenta |
 | Mesa de regalos: tienda (la transferencia BBVA ya está) | `index.html` → sección regalos (quitar `aria-disabled` del enlace) |
@@ -60,6 +58,7 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 | Hashtag `#AbiYJasiel2026` (validar en Instagram que esté libre) | `index.html` → sección comparte |
 | Clave del panel de organizador | `js/pases.js` → `CLAVE_SHA256` |
 
+Bebidas: celebración cristiana, sin alcohol (no se anuncia como prohibición; simplemente no se sirve).
 Menú: el checklist decía carnitas 90 % puerco / 10 % pollo; por corrección es **barbacoa de res**.
 
 ## Probar en local
