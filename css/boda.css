@@ -365,16 +365,6 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
   font: 600 0.8rem var(--f-texto); letter-spacing: 0.18em; text-transform: uppercase; animation: latido 2.6s ease-in-out infinite;
 }
 
-/* ============ Video "Sentenciados" ============ */
-.sentenciados { text-align: center; }
-.sentenciados-marco { position: relative; margin: 0 auto; width: min(100%, 24rem); border: 8px solid #fdfbf6; border-radius: 6px; box-shadow: var(--sombra); rotate: -1.5deg; }
-.sentenciados-marco video { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; background: #000; }
-.sentenciados-sonido {
-  position: absolute; left: 50%; bottom: 0.9rem; translate: -50% 0; display: inline-flex; align-items: center; gap: 0.45rem;
-  padding: 0.6rem 1rem; border: 0; border-radius: 999px; background: rgba(5, 13, 36, 0.78); color: #fff;
-  font: 600 0.74rem var(--f-texto); letter-spacing: 0.14em; text-transform: uppercase; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-}
-
 /* ============ Programa ============ */
 .programa .titulo { text-align: center; }
 .linea { list-style: none; margin: 0; padding: 0; position: relative; }
