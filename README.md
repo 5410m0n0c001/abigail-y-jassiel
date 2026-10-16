@@ -48,7 +48,6 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 
 | Dato | Dónde se cambia |
 |---|---|
-| Padres de la novia y padrinos (los del novio ya están) | `index.html` → sección familia |
 | ¿Niños? / menú infantil | `index.html` (`data-ninos`) |
 | Música: es el sonido del video de la historia | `video/historia.mp4` |
 | Video de portada (sesión del 14 de octubre) | `index.html` → `.portada-foto` (ver comentario) |

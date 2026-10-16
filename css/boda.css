@@ -296,6 +296,10 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
 .familia-grupo + .familia-grupo { margin-top: 1.8rem; }
 .familia-grupo h3 { font: 600 0.74rem var(--f-texto); letter-spacing: 0.35em; text-transform: uppercase; color: var(--azul); margin-bottom: 0.5rem; padding-left: 0.35em; }
 .familia-grupo p { font: 400 1.4rem/1.35 var(--f-display); color: var(--marino); }
+.padrinos { margin: 0; display: grid; gap: 1.1rem; }
+.padrinos dt { font: 400 1.9rem/1 var(--f-script); color: var(--champan, var(--azul)); margin-bottom: 0.15rem; }
+.padrinos dd { margin: 0; font: 400 1.3rem/1.35 var(--f-display); color: var(--marino); }
+.padrinos dd + dd::before { content: "&"; display: block; font: italic 400 1rem var(--f-texto); color: var(--oro); }
 .familia-grupo p + p::before { content: "&"; display: block; font: italic 400 1.1rem var(--f-texto); color: var(--oro); }
 
 /* ============ Fecha ============ */
