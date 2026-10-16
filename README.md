@@ -48,12 +48,12 @@ Todo lo pendiente se ve en la invitación como texto en cursiva con un ✎.
 
 | Dato | Dónde se cambia |
 |---|---|
-| Padres y padrinos | `index.html` → sección familia |
+| Padres de la novia y padrinos (los del novio ya están) | `index.html` → sección familia |
 | Tema de la entrada triunfal | `index.html` → minuto a minuto |
 | ¿Evento sin alcohol? (barra mix e "Información importante") | `index.html` (`data-alcohol`) |
 | ¿Niños? / menú infantil | `index.html` (`data-ninos`) |
 | Código de vestimenta | `index.html` → sección vestimenta |
-| Mesa de regalos: banco, cuenta, titular y tienda | `index.html` → sección regalos (quitar `aria-disabled` del enlace) |
+| Mesa de regalos: tienda (la transferencia BBVA ya está) | `index.html` → sección regalos (quitar `aria-disabled` del enlace) |
 | Hospedaje | `index.html` → sección hospedaje |
 | Música: es el sonido del video de la historia | `video/historia.mp4` |
 | Video de portada (sesión del 14 de octubre) | `index.html` → `.portada-foto` (ver comentario) |

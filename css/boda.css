@@ -296,6 +296,7 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
 .familia-grupo + .familia-grupo { margin-top: 1.8rem; }
 .familia-grupo h3 { font: 600 0.74rem var(--f-texto); letter-spacing: 0.35em; text-transform: uppercase; color: var(--azul); margin-bottom: 0.5rem; padding-left: 0.35em; }
 .familia-grupo p { font: 400 1.4rem/1.35 var(--f-display); color: var(--marino); }
+.familia-grupo p + p::before { content: "&"; display: block; font: italic 400 1.1rem var(--f-texto); color: var(--oro); }
 
 /* ============ Fecha ============ */
 .fecha { text-align: center; }
