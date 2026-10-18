@@ -369,6 +369,11 @@ body.escena-3d-lista .rosa-respaldo { display: none; }
   font: 600 0.8rem var(--f-texto); letter-spacing: 0.18em; text-transform: uppercase; animation: latido 2.6s ease-in-out infinite;
 }
 
+/* ============ Nuestra historia (video vertical) ============ */
+.historia-cel { text-align: center; }
+.historia-cel-marco { margin: 0 auto; width: min(100%, 22rem); border: 8px solid #fdfbf6; border-radius: 24px; overflow: hidden; box-shadow: var(--sombra); background: #000; }
+.historia-cel-marco video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover; }
+
 /* ============ Programa ============ */
 .programa .titulo { text-align: center; }
 .linea { list-style: none; margin: 0; padding: 0; position: relative; }

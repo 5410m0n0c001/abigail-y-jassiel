@@ -88,6 +88,14 @@
     else if (!document.hidden && video.dataset.reanudar) { video.play().catch(() => {}); delete video.dataset.reanudar; }
   });
 
+  // ---------- Video "Nuestra historia": sin audio; corre solo mientras se ve ----------
+  const vHist = $('#video-nuestra-historia');
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting && !document.body.classList.contains('sobre-cerrado')) vHist.play().catch(() => {});
+    else vHist.pause();
+  }, { threshold: 0.4 }).observe(vHist);
+  vHist.addEventListener('click', () => (vHist.paused ? vHist.play() : vHist.pause()));
+
   // ---------- Progreso de la portada (--p) y salida de la foto fija (--salida) ----------
   const portada = $('#portada');
   // las variables se escriben solo en los elementos que las usan: en la raíz obligarían a
