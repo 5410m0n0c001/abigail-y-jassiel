@@ -63,3 +63,13 @@ Menú: el checklist decía carnitas 90 % puerco / 10 % pollo; por corrección es
 npx http-server . -p 4510 -c-1
 ```
 Agrega `?debug` a la URL para probar sin música ni recorrido guiado.
+
+## Borrar fotos del álbum (solo administrador)
+- En el panel → "Descargar fotos y videos" → "Fotos del álbum de los invitados": 🗑 en cada foto o
+  "Eliminar del álbum (N)" con las seleccionadas. Pide confirmación y no se puede deshacer.
+- Lo hace la función de servidor de Supabase `album-borrar` (borra la foto, su miniatura `_t.jpg` y su registro).
+  Solo funciona con la clave del panel, guardada como SHA-256 en la tabla privada `public.album_admin`
+  (RLS sin políticas: la página pública no puede leerla ni borrar nada).
+- **Si cambias la clave del panel**, cámbiala en los dos lugares:
+  1. `js/pases.js` → `CLAVE_SHA256` (`printf 'nueva' | sha256sum`, en minúsculas)
+  2. Supabase: `update public.album_admin set clave_sha256 = encode(extensions.digest('nueva', 'sha256'), 'hex') where album_id = 'boda-abigail-jasiel-2026';`

@@ -293,3 +293,9 @@ body { background-image: none; background-attachment: scroll; }
 .desc-pie { position: sticky; bottom: calc(-1.4rem - env(safe-area-inset-bottom)); display: grid; gap: 0.6rem; margin: 0 -1.3rem calc(-1.4rem - env(safe-area-inset-bottom)); padding: 0.9rem 1.3rem calc(1.2rem + env(safe-area-inset-bottom)); background: #fff; box-shadow: 0 -10px 20px rgba(20, 42, 92, 0.08); }
 .org-panel .boton:not(.boton-lleno) { color: #142a5c; border-color: #142a5c; }
 .desc-videos .desc-item-pie span { white-space: normal; line-height: 1.25; }
+/* borrar fotos del álbum (solo administrador) */
+.desc-grupo-album .desc-item-pie { grid-template-columns: auto 1fr auto auto; }
+.desc-papelera { border-color: #f1c4c4; font-size: 0.85rem; }
+.desc-papelera:hover { background: #fdecec; }
+.org-panel .boton.desc-borrar { color: #a32d2d; border-color: #a32d2d; }
+.org-panel .boton.desc-borrar:hover { background: #fdecec; }

@@ -33,8 +33,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Updock&display=swap" rel="stylesheet">
   <link rel="preload" href="models/rosa.glb" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
-  <link rel="stylesheet" href="css/boda.css?v=20261018a">
-  <link rel="stylesheet" href="css/tema-noche.css?v=20261018a">
+  <link rel="stylesheet" href="css/boda.css?v=20261022a">
+  <link rel="stylesheet" href="css/tema-noche.css?v=20261022a">
 
   <script type="importmap">
     {
@@ -44,20 +44,20 @@
       }
     }
   </script>
-  <script src="js/config.js?v=20261018a"></script>
+  <script src="js/config.js?v=20261022a"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js"></script>
-  <script defer src="js/app.js?v=20261018a"></script>
-  <script defer src="js/carmesi.js?v=20261018a"></script>
-  <script defer src="js/pases.js?v=20261018a"></script>
-  <script defer src="js/descargas.js?v=20261018a"></script>
-  <script type="module" src="js/escena3d.js?v=20261018a"></script>
+  <script defer src="js/app.js?v=20261022a"></script>
+  <script defer src="js/carmesi.js?v=20261022a"></script>
+  <script defer src="js/pases.js?v=20261022a"></script>
+  <script defer src="js/descargas.js?v=20261022a"></script>
+  <script type="module" src="js/escena3d.js?v=20261022a"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script defer src="js/album.js?v=20261018a"></script>
-  <script defer src="js/retos.js?v=20261018a"></script>
+  <script defer src="js/album.js?v=20261022a"></script>
+  <script defer src="js/retos.js?v=20261022a"></script>
 </head>
 
 <body class="sobre-cerrado">
@@ -604,13 +604,14 @@
     <div class="org-panel org-panel-ancho" role="dialog" aria-modal="true" aria-labelledby="org-descargas-titulo">
       <button class="org-cerrar" type="button" id="desc-cerrar" aria-label="Volver">×</button>
       <h2 class="org-titulo" id="org-descargas-titulo">Descargar fotos y videos</h2>
-      <p class="org-sub">Toca lo que quieras guardar y luego el botón de abajo. También puedes descargar cada cosa con su flechita.</p>
+      <p class="org-sub">Toca lo que quieras guardar y luego el botón de abajo. También puedes descargar cada cosa con su flechita, y eliminar del álbum las fotos de invitados que no quieras con 🗑.</p>
       <div class="desc-lista" id="desc-lista"></div>
       <div class="desc-pie">
         <label class="org-check"><input type="checkbox" id="desc-todo"> Seleccionar todo</label>
         <p class="org-total" id="desc-total">Nada seleccionado</p>
         <button class="boton boton-lleno" type="button" id="desc-bajar" disabled>Descargar seleccionados</button>
         <button class="boton" type="button" id="desc-guardar" hidden>Guardar en Fotos</button>
+        <button class="boton desc-borrar" type="button" id="desc-borrar" hidden>Eliminar del álbum</button>
         <p class="org-falta" id="desc-estado" aria-live="polite"></p>
         <button class="enlace org-secundario" type="button" id="desc-volver">Volver a enviar invitaciones</button>
       </div>

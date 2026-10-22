@@ -66,7 +66,7 @@
   // El modo administrador existe solo mientras el panel está abierto (o su menú de compartir).
   // Al cerrar el panel (×, tocar fuera, Esc o "Salir") se apaga y Compartir vuelve a enviar
   // solo la invitación. Nada se guarda en el celular (se borra la marca de versiones viejas).
-  let activo = false;
+  let activo = false, claveActual = '';
   try { localStorage.removeItem('boda-aj-organizador'); } catch { /* sin almacenamiento */ }
   const btnCompartir = $('#compartir');
   const textoBoton = btnCompartir.querySelector('span');
@@ -105,6 +105,7 @@
       errorPin.hidden = false; inputPin.select(); return;
     }
     activo = true;
+    claveActual = inputPin.value.trim(); // solo en memoria: la usa "Descargar fotos y videos" para borrar fotos del álbum
     marcar(); cerrarPin();
     abrir(); // la clave abre directamente el panel
   });
@@ -166,6 +167,7 @@
   function salir() {
     if (!activo) return;
     activo = false;
+    claveActual = '';
     ocultar(); marcar();
     window.avisar('Saliste del panel de administrador');
   }
@@ -202,5 +204,5 @@
     window.compartir(datos).finally(() => { if (activo) abrir(nombre); });
   });
 
-  window.organizador = { activo: () => activo, abrir };
+  window.organizador = { activo: () => activo, abrir, clave: () => claveActual };
 })();

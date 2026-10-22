@@ -49,9 +49,47 @@
     return b;
   }
 
+  // ---------- borrar fotos del álbum de invitados ----------
+  // La función de servidor album-borrar solo borra con la clave del panel (la página pública no puede borrar).
+  const btnBorrarSel = $('#desc-borrar');
+  function botonBorrar(item) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'desc-flecha desc-papelera';
+    b.setAttribute('aria-label', `Eliminar ${item.nombre} del álbum`);
+    b.textContent = '🗑';
+    b.addEventListener('click', () => borrarFotos([item]));
+    return b;
+  }
+  async function borrarFotos(items) {
+    const n = items.length;
+    if (!n || !confirm(`¿Eliminar ${n === 1 ? 'esta foto' : `estas ${n} fotos`} del álbum? Ya no se podrán recuperar.`)) return;
+    estado.textContent = 'Eliminando…';
+    try {
+      const r = await fetch(`${cfg.album.supabaseUrl}/functions/v1/album-borrar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: cfg.album.supabaseKey },
+        body: JSON.stringify({ albumId: cfg.album.albumId, clave: window.organizador?.clave() || '', ids: items.map((i) => i.id) }),
+      });
+      const res = await r.json();
+      if (!r.ok) throw new Error(res.error || 'No se pudo eliminar');
+      items.forEach((item) => {
+        item.tarjeta.remove();
+        elegidos.delete(item);
+        todos.splice(todos.indexOf(item), 1);
+      });
+      const quedan = todos.filter((i) => i.album).length;
+      const titulo = lista.querySelector('.desc-grupo-album h3');
+      if (titulo) titulo.textContent = `Fotos del álbum de los invitados (${quedan})`;
+      estado.textContent = `${res.borradas} ${res.borradas === 1 ? 'foto eliminada' : 'fotos eliminadas'} del álbum.`;
+      marcar();
+    } catch (err) { estado.textContent = err.message; }
+  }
+  btnBorrarSel.addEventListener('click', () => borrarFotos([...elegidos].filter((i) => i.album)));
+
   function pintarGrupo(g) {
     const sec = document.createElement('section');
-    sec.className = 'desc-grupo';
+    sec.className = g.album ? 'desc-grupo desc-grupo-album' : 'desc-grupo';
     const h = document.createElement('h3');
     h.textContent = g.titulo;
     const rejilla = document.createElement('div');
@@ -75,6 +113,8 @@
       const etiqueta = document.createElement('span');
       etiqueta.textContent = item.nombre;
       pie.append(casilla(item), etiqueta, botonBajar(item));
+      if (item.album) pie.append(botonBorrar(item));
+      item.tarjeta = tarjeta;
       tarjeta.append(pie);
       rejilla.append(tarjeta);
     });
@@ -87,10 +127,10 @@
   async function grupoAlbum() {
     if (!window.supabase) return;
     const db = window.supabase.createClient(cfg.album.supabaseUrl, cfg.album.supabaseKey);
-    const { data, error } = await db.from('fotos').select('url, created_at').eq('album_id', cfg.album.albumId).order('created_at', { ascending: true });
+    const { data, error } = await db.from('fotos').select('id, url, created_at').eq('album_id', cfg.album.albumId).order('created_at', { ascending: true });
     if (error) return;
-    const g = { titulo: `Fotos del álbum de los invitados (${data.length})`, tipo: 'foto', items: data.map((f, i) => (
-      { nombre: `Álbum ${i + 1}`, url: f.url, mini: f.url.replace(/\.jpg$/, '_t.jpg'), archivo: `Album-invitados-${String(i + 1).padStart(3, '0')}.jpg` }
+    const g = { titulo: `Fotos del álbum de los invitados (${data.length})`, tipo: 'foto', album: true, items: data.map((f, i) => (
+      { id: f.id, album: true, nombre: `Álbum ${i + 1}`, url: f.url, mini: f.url.replace(/\.jpg$/, '_t.jpg'), archivo: `Album-invitados-${String(i + 1).padStart(3, '0')}.jpg` }
     )) };
     if (!data.length) {
       const sec = document.createElement('section');
@@ -107,6 +147,9 @@
     const n = elegidos.size;
     total.textContent = n ? `${n} ${n === 1 ? 'archivo seleccionado' : 'archivos seleccionados'}` : 'Nada seleccionado';
     btnBajar.disabled = !n;
+    const delAlbum = [...elegidos].filter((i) => i.album).length;
+    btnBorrarSel.hidden = !delAlbum;
+    btnBorrarSel.textContent = `Eliminar del álbum (${delAlbum})`;
     todo.checked = n > 0 && n === todos.length;
     btnGuardar.hidden = true; // si cambia la selección hay que volver a preparar
     preparados = null;
